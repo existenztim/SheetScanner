@@ -137,6 +137,7 @@ const Navbar = () => {
                   {notes.length}
                 </span>
               )
+       
             )}
             <MdArticle className={pathname === `/notes/${displayName || 'guest'}` ? 'active-route' : ''} />
           </Link>
