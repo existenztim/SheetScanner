@@ -8,8 +8,7 @@ import { INote } from '../models/interfaces/INote';
  * @returns {IKeyValuePairs[] | INote[]} An array of matching items.
  */
 
-export const scanData = (data: IKeyValuePairs[] | INote[], terms: string): IKeyValuePairs[] | INote[] => {
-  // Convert search terms to an array and filter out empty terms
+export const scanData = (data: IKeyValuePairs[] | INote[], terms: string) => {
   const searchTermsArray: string[] = terms
     .toLowerCase()
     .split(' ')
@@ -19,15 +18,15 @@ export const scanData = (data: IKeyValuePairs[] | INote[], terms: string): IKeyV
     return [];
   }
 
-  // Filter the data based on search terms
   return (data as IKeyValuePairs[]).filter(item => {
     return searchTermsArray.every(term => {
       for (const key in item) {
         if (String(item[key]).toLowerCase().includes(term)) {
-          return true; // If a match is found, return true
+          return true;
         }
       }
-      return false; // If no match is found for the current term, return false
+      return false;
     });
   });
 };
+

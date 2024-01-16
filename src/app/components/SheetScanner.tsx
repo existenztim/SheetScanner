@@ -6,7 +6,10 @@ import SignInChoice from './SignInChoice';
 import { Carousel } from 'react-responsive-carousel';
 import ExcelFileProcessor from './ExcelFileProcessor';
 import * as XLSX from 'xlsx';
-import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
+
+interface IKeyValuePairs {
+  [propertyKey: string]: string | undefined;
+}
 
 const SheetScanner = () => {
   const {
@@ -25,6 +28,7 @@ const SheetScanner = () => {
   } = GlobalContext();
   const [guest, setGuest] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+
   const [excelData1, setExcelData1] = useState<IKeyValuePairs[]>([]);
   const [excelData2, setExcelData2] = useState<IKeyValuePairs[]>([]);
   const [excelData3, setExcelData3] = useState<IKeyValuePairs[]>([]);

@@ -9,6 +9,14 @@ interface CreateUserRequestedBody {
   noteId: string;
 }
 
-export function POST(req: NextRequest) {
-    return req;
+//the following is only to get rid of vercel deployment error
+export async function POST(req: NextRequest) {
+  try {
+    await connectMongoDB();
+    const { user, noteId }: CreateUserRequestedBody = await req.json();
+    return NextResponse.json({ message: user }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: 'Server Error' }, { status: 500 });
+  }
 }

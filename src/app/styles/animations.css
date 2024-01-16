@@ -14,10 +14,33 @@
   animation: clippath 3s infinite linear;
 }
 
-
-.fadein {
-  animation: fadeIn 0.3s ease-in-out;
+.sheetscanner-loader {
+  animation: sheetscanner-loader 1s linear infinite;
 }
+
+.sheetscanner-fadein {
+  animation: sheetscanner-fadein 0.3s ease-in-out;
+}
+
+.sheetscanner-stats-paragraph {
+  transform: translateX(-200px);
+  animation: sheetscanner-fadeinFromLeft 1.5s ease forwards;
+}
+
+.sheetscanner-stats-paragraph:nth-child(2) {
+  animation: sheetscanner-fadeinFromRight 1.5s ease forwards;
+}
+
+.sheetscanner-start-type,
+.sheetscanner-start-upload {
+  opacity: 0;
+  transform: translateY(-200px);
+  animation: fadeInFromBottom 1.5s ease forwards;
+}
+
+/**************************************************************/
+/*                        Keyframes                           */
+/**************************************************************/
 
 @keyframes sheetscanner-loader {
   0% {
@@ -30,12 +53,45 @@
   }
 }
 
-@keyframes fadeIn {
+@keyframes sheetscanner-fadein {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes fadeInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(-200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
