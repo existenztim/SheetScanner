@@ -6,6 +6,7 @@ import { FileFormat } from '../models/enums/EFileFormat';
 import '.././styles/animations.css';
 import { GlobalContext } from './ParentProvider';
 import NotificationForm from './NotificationForm';
+import AlertModal from './AlertModal';
 import { cutLongStrings } from '../utils/stringManipulation';
 import { scanData } from '../utils/scanData';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
@@ -48,7 +49,6 @@ const ExcelFileProcessor = ({
     }
 
     if (file.size > sizeLimit) {
-      // File size exceeds the limit
       setWrongFileFormat('File size exceeds the allowed limit (3000kb).');
       fileUploaded.value = '';
       return;
@@ -141,7 +141,7 @@ const ExcelFileProcessor = ({
       <main
         className={
           settings.animations
-            ? 'sheetscanner-fadein flex flex-col my-0 mx-auto px-2 gap-2 mb-4 max-w-[100%] min-h-[80vh] xl:flex-row xl:max-w-[1800px]'
+            ? 'sheetscanner-sheetscanner-fadein flex flex-col my-0 mx-auto px-2 gap-2 mb-4 max-w-[100%] min-h-[80vh] xl:flex-row xl:max-w-[1800px]'
             : 'flex flex-col my-0 mx-auto px-2 gap-2 mb-4 max-w-[100%] min-h-[80vh] xl:flex-row xl:max-w-[1800px]'
         }
       >
@@ -244,7 +244,7 @@ const ExcelFileProcessor = ({
                 key={index}
                 classNames={settings.animations ? 'sheetscanner-hit-container' : ''}
                 timeout={600}
-                in={filteredDataChanged} // Add the in prop to trigger the animation
+                in={filteredDataChanged} // Add the "in" prop to trigger the animation
                 unmountOnExit // Remove the element from the DOM when it exits
               >
                 <div className="">
@@ -292,25 +292,8 @@ const ExcelFileProcessor = ({
           </div>
         )}
         {wrongFileFormat && (
-        <div className="flex items-center justify-center h-screen w-screen top-[-6rem] fixed z-40 bg-slate-100 bg-opacity-50">
-          <div className="w-96 p-4 bg-white rounded-lg shadow-lg">
-            <div className="flex flex-col items-stretch justify-center">
-                <h4 className="font-bold text-lg w-full border-b border-grey-500 text-red-600">Error</h4>
-                <p className="mt-4">
-                 {wrongFileFormat}
-                </p>
-            </div>
-            <div className="mt-4 flex space-x-4 justify-end">  
-                <button
-                  className="bg-yellow-600 rounded text-gray-800 py-2 hover:text-gray-50"
-                  onClick={handleFileResponse}
-                >
-                  Ok
-                </button>
-            </div>
-          </div>
-        </div>
-        )}
+        <AlertModal errorMessage={wrongFileFormat} handleFileResponse={handleFileResponse} />
+      )}
         
       </main>   
     </>
