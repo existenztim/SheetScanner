@@ -33,6 +33,7 @@ const ExcelFileProcessor = ({
   const [sheetList, setSheetList] = useState<string[]>([]);
   const [workbook, setWorkbook] = useState<XLSX.WorkBook | null>(null);
   const {settings, handleClipboardValue } = GlobalContext();
+  const [wrongFileFormat, setWrongFileFormat] = useState<string>('');
   const shortenedFileName = cutLongStrings(fileName, 30);
 
   const handleFileUpload = (e: XLSX.WorkSheet) => {
@@ -41,14 +42,14 @@ const ExcelFileProcessor = ({
     const sizeLimit = 3000 * 1024; //3000kb
 
     if (file.type !== FileFormat.CSV && file.type !== FileFormat.XLS && file.type !== FileFormat.XLSX) {
-      alert('Wrong file format uploaded!'); //gör en modal component
+      setWrongFileFormat('Wrong file format uploaded!');
       fileUploaded.value = '';
       return;
     }
 
     if (file.size > sizeLimit) {
       // File size exceeds the limit
-      alert('File size exceeds the allowed limit (3000kb).'); //gör en modal component
+      setWrongFileFormat('File size exceeds the allowed limit (3000kb).');
       fileUploaded.value = '';
       return;
     }
@@ -130,6 +131,10 @@ const ExcelFileProcessor = ({
       handleClipboardValue(newClipboard, propertyKey);
     }
   };
+
+  const handleFileResponse = () => {
+    setWrongFileFormat('');   
+  }
 
   return (
     <>
@@ -286,7 +291,28 @@ const ExcelFileProcessor = ({
             <NotificationForm></NotificationForm>
           </div>
         )}
-      </main>
+        {wrongFileFormat && (
+        <div className="flex items-center justify-center h-screen w-screen top-[-6rem] fixed z-40 bg-slate-100 bg-opacity-50">
+          <div className="w-96 p-4 bg-white rounded-lg shadow-lg">
+            <div className="flex flex-col items-stretch justify-center">
+                <h4 className="font-bold text-lg w-full border-b border-grey-500 text-red-600">Error</h4>
+                <p className="mt-4">
+                 {wrongFileFormat}
+                </p>
+            </div>
+            <div className="mt-4 flex space-x-4 justify-end">  
+                <button
+                  className="bg-yellow-600 rounded text-gray-800 py-2 hover:text-gray-50"
+                  onClick={handleFileResponse}
+                >
+                  Ok
+                </button>
+            </div>
+          </div>
+        </div>
+        )}
+        
+      </main>   
     </>
   );
 };
