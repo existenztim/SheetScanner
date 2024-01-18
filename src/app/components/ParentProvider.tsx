@@ -19,6 +19,7 @@ const defaultSettings: ISettings = {
   showForm: true,
   showMatchingString: true,
   animations: true,
+  autoFill: true
 };
 
 //initialValues

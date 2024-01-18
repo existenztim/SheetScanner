@@ -3,8 +3,6 @@ import {
   MdOutlineAdfScanner,
   MdArticle,
   MdCancel,
-  MdLogin,
-  MdLogout,
   MdHomeFilled,
   MdOutlineSettings,
 } from 'react-icons/md';
@@ -20,9 +18,8 @@ import { IUserData } from '../models/interfaces/IUser';
 import { ISettings } from '../models/interfaces/ISettings';
 import { API_URLS } from '../models/ApiRoutes';
 import SettingsForm from './SettingsForm';
-import { handleLogOut, handleSignIn } from '../utils/authUtils';
 import { removeBlankSpace } from '../utils/stringManipulation';
-import { User } from 'firebase/auth';
+import AuthenticationToggle from './AuthenticationToggle';
 
 const Navbar = () => {
   const router = useRouter();
@@ -35,21 +32,21 @@ const Navbar = () => {
     showForm: true,
     showMatchingString: true,
     animations: true,
+    autoFill: true,
   });
 
-  const { user, notes, BASE_URL, logOut, googleSignIn, setUserSettings, setUserNotes } = GlobalContext();
+  const { user, notes, BASE_URL, setUserSettings, setUserNotes } = GlobalContext();
 
   const displayName = removeBlankSpace(user?.displayName);
 
   useEffect(() => {
-    // Check if the user is authenticated
     if (user && !loginHandled) {
       setLoginHandled(true);
       postToDatabase();
     } else {
       setLoginHandled(false);
     }
-  }, [user]);
+  }, [user]); 
 
   useEffect(() => {
     const checkauth = async () => {
@@ -73,7 +70,6 @@ const Navbar = () => {
         setUserSettings(response.data.settings);
         setUserNotes(response.data.notes);
         router.push(`/scanner/${displayName}`);
-        //behövs denna else if? gör annars samma som response.status 200
       } else if (response.status === 201) {
         localStorage.setItem('user', displayName || 'guest');
         router.push(`/scanner/${displayName}`);
@@ -89,14 +85,6 @@ const Navbar = () => {
     setMenuToogle(!menuToggle);
   };
 
-  const initializeSignIn = () => {
-    handleSignIn(googleSignIn);
-  };
-
-  const initialzeLogOut = () => {
-    handleLogOut(logOut);
-  };
-
   return (
     <>
       <header className="bg-green-800 text-slate-100 w-full h-14 m-0 fixed top-0 left-0 z-50 p-0 justify-center items-center flex">
@@ -109,8 +97,6 @@ const Navbar = () => {
             height={35}
           />
         </div>
-        {/* <h1 className="hidden gap-4 items-center text-2xl text-gray-200 z-50 lg:flex">SheetScanner</h1> */}
-
         <div className="flex items-center text-4xl gap-4 z-50">
           <Link className="sheetScanner-nav-links sheetScanner-hover" href={'/'} aria-label="Go to home view.">
             <MdHomeFilled className={pathname === '/' ? 'active-route' : ''} />
@@ -137,7 +123,6 @@ const Navbar = () => {
                   {notes.length}
                 </span>
               )
-       
             )}
             <MdArticle className={pathname === `/notes/${displayName || 'guest'}` ? 'active-route' : ''} />
           </Link>
@@ -150,24 +135,7 @@ const Navbar = () => {
               Welcome: <span>{user ? user.displayName : 'guest'}</span>
             </p>
           )}
-          {!user ? (
-            <button
-              className="sheetScanner-nav-links sheetScanner-hover hidden md:flex"
-              onClick={initializeSignIn}
-              aria-label="sign in."
-            >
-              <MdLogin />
-            </button>
-          ) : (
-            <button
-              className="sheetScanner-nav-links sheetScanner-hover hidden md:flex"
-              onClick={initialzeLogOut}
-              aria-label="log out."
-            >
-              <MdLogout />
-            </button>
-          )}
-
+          <div className='hidden md:flex'><AuthenticationToggle/></div>
           <button
             onClick={handleMenuToggle}
             aria-label="Open the settings menu"

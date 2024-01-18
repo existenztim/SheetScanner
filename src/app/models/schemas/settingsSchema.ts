@@ -17,4 +17,8 @@ export const settingsSchema = new Schema({
     type: Boolean,
     required: true,
   },
+  autoFill: {
+    type: Boolean,
+    required: true,
+  },
 });

@@ -3,4 +3,5 @@ export interface ISettings {
   showForm: boolean;
   showMatchingString: boolean;
   animations: boolean;
+  autoFill: boolean;
 }
