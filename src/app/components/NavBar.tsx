@@ -49,7 +49,7 @@ const Navbar = () => {
     } else {
       setLoginHandled(false);
     }
-  }, [user]); // Listen for changes in the user object
+  }, [user]);
 
   useEffect(() => {
     const checkauth = async () => {
