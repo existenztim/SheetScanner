@@ -1,9 +1,9 @@
-interface ErrorModalProps {
+interface AlertModalProps {
     errorMessage: string;
-    handleFileResponse: () => void;
+    closeAlertModal: () => void;
   }
-  
-  const AlertModal = ({ errorMessage, handleFileResponse }: ErrorModalProps) => {
+  //lägg till för att använda vid error kopplat till routes/db
+  const AlertModal = ({ errorMessage, closeAlertModal }: AlertModalProps) => {
     return (
       <div className="flex items-center justify-center h-screen w-screen top-[-6rem] fixed z-40 bg-slate-100 bg-opacity-50">
         <div className="w-96 p-4 bg-white rounded-lg shadow-lg">
@@ -14,7 +14,7 @@ interface ErrorModalProps {
           <div className="mt-4 flex space-x-4 justify-end">
             <button
               className="bg-yellow-600 rounded text-gray-800 py-2 hover:text-gray-50"
-              onClick={handleFileResponse}
+              onClick={closeAlertModal}
             >
               Ok
             </button>

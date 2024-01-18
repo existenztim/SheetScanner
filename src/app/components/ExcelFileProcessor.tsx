@@ -141,7 +141,7 @@ const ExcelFileProcessor = ({
       <main
         className={
           settings.animations
-            ? 'sheetscanner-sheetscanner-fadein flex flex-col my-0 mx-auto px-2 gap-2 mb-4 max-w-[100%] min-h-[80vh] xl:flex-row xl:max-w-[1800px]'
+            ? 'sheetscanner-fadein flex flex-col my-0 mx-auto px-2 gap-2 mb-4 max-w-[100%] min-h-[80vh] xl:flex-row xl:max-w-[1800px]'
             : 'flex flex-col my-0 mx-auto px-2 gap-2 mb-4 max-w-[100%] min-h-[80vh] xl:flex-row xl:max-w-[1800px]'
         }
       >
@@ -292,7 +292,7 @@ const ExcelFileProcessor = ({
           </div>
         )}
         {wrongFileFormat && (
-        <AlertModal errorMessage={wrongFileFormat} handleFileResponse={handleFileResponse} />
+        <AlertModal errorMessage={wrongFileFormat} closeAlertModal={handleFileResponse} />
       )}
         
       </main>   
