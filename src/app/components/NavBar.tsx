@@ -29,6 +29,7 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState<ISettings>({
     instances: 3,
+    itemsToRender: 10,
     showForm: true,
     showMatchingString: true,
     animations: true,

@@ -8,13 +8,28 @@ import { GlobalContext } from './ParentProvider';
 import { handleLogOut, handleSignIn } from '../utils/authUtils';
 
 const AuthenticationToggle = () => {
-  const { user, logOut, googleSignIn } = GlobalContext();
+  const { 
+    user, 
+    logOut, 
+    googleSignIn,    
+    setWorkSheet1,
+    setWorkSheet2,
+    setWorkSheet3,
+    setWorkSheet4,
+    setWorkSheet5, 
+  } = GlobalContext();
+
   const initializeSignIn = () => {
     handleSignIn(googleSignIn);
   };
 
   const initialzeLogOut = () => {
     handleLogOut(logOut);
+    setWorkSheet1(null);
+    setWorkSheet2(null);
+    setWorkSheet3(null);
+    setWorkSheet4(null);
+    setWorkSheet5(null);
   };
 
   return (

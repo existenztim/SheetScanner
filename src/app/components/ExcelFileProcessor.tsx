@@ -29,7 +29,6 @@ const ExcelFileProcessor = ({
   filteredDataChanged,
 }: IExcelScannerProps) => {
   const [searchTerms, setSearchTerms] = useState<string>('');
-  const [itemsToRender, setItemsToRender] = useState<number>();
   const [fileName, setFileName] = useState<string>();
   const [sheetList, setSheetList] = useState<string[]>([]);
   const [workbook, setWorkbook] = useState<XLSX.WorkBook | null>(null);
@@ -75,7 +74,6 @@ const ExcelFileProcessor = ({
         
         setFileName(file.name);
         setExcelData(jsonData);
-        setItemsToRender(10);
       }
     };
 
@@ -239,7 +237,7 @@ const ExcelFileProcessor = ({
           </div>
 
           <TransitionGroup className="card-list flex flex-col p-1 m-2 rounded-2xl overflow-auto max-h-[80vh]">
-            {filteredData.slice(0, itemsToRender).map((item, index) => ( // instead of 0 add pagination?
+            {filteredData.slice(0, settings.itemsToRender).map((item, index) => ( // instead of 0 add pagination?
               <CSSTransition
                 key={index}
                 classNames={settings.animations ? 'sheetscanner-hit-container' : ''}

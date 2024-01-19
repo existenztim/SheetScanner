@@ -17,7 +17,8 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
   const [apiErrorResponse, setApiErrorResponse] = useState<string>('');
   const [tempSettings, setTempSettings] = useState<ISettings>({
     instances: settings.instances,
-    showForm: settings.showForm,
+    itemsToRender: settings.itemsToRender,
+    showForm: settings.showForm, 
     showMatchingString: settings.showMatchingString,
     animations: settings.animations,
     autoFill: settings.autoFill
@@ -26,17 +27,14 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
   const HandleSettings = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, checked } = e.target;
     const rangeValue = +e.target.value;
-    if (rangeValue) {
-      setTempSettings(prevSettings => ({
+  
+    setTempSettings((prevSettings) => {
+      const updatedSettings = {
         ...prevSettings,
-        instances: rangeValue,
-      }));
-    } else {
-      setTempSettings(prevSettings => ({
-        ...prevSettings,
-        [id]: checked,
-      }));
-    }
+        [id]: rangeValue ? rangeValue : checked,
+      };
+      return updatedSettings; 
+    });
   };
   
   const handleSettingsSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -91,7 +89,7 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     <>
     <div className={
       settings.animations
-        ? 'sheetScanner-fadeInFromTop rounded-md fixed z-40 top-14 right-1 flex flex-col justify-center items-center bg-green-800 max-w-md w-full p-4 shadow-md border-t-2 border-gray-200'
+        ? 'sheetscanner-fadeinFromTop rounded-md fixed z-40 top-14 right-1 flex flex-col justify-center items-center bg-green-800 max-w-md w-full p-4 shadow-md border-t-2 border-gray-200'
         : 'rounded-md fixed z-40 top-14 right-1 flex flex-col justify-center items-center bg-green-800 max-w-md w-full p-4 shadow-md border-t-2 border-gray-200'
     }>
       <div className='settings-list flex flex-col p-2 gap-2 justify-start w-full'>
@@ -115,9 +113,17 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
             <output>{tempSettings.instances}</output>
           </div>
           <div className="flex items-center gap-2  border-b border-grey-500">
-            <label htmlFor="hits">Maximum hits to render:</label>
-            <input type="range" id="hits" name="hits" min={1} max={50} value={50} />
-            <output>{50}</output>
+            <label htmlFor="itemsToRender">Maximum hits to render:</label>
+            <input 
+              type="range" 
+              id="itemsToRender" 
+              name="itemsToRender" 
+              min={1} 
+              max={50} 
+              value={tempSettings.itemsToRender}
+              onChange={HandleSettings}
+              />
+            <output>{tempSettings.itemsToRender}</output>
           </div>
           <div className="flex gap-2">
             <label htmlFor="showForm">Show form:</label>
