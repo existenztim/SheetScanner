@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     await connectMongoDB();
-    const { user, settings, notes } = await req.json();
-    console.log('notes', notes);
+    const { user, settings, notes }: CreateUserRequestedBody = await req.json();
+    console.log('settings', settings);
     if (!user) {
       return NextResponse.json({ message: 'Invalid user data' }, { status: 400 });
     }

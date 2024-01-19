@@ -16,9 +16,11 @@ interface ParentProviderProps {
 const defaultUser: User | null = null;
 const defaultSettings: ISettings = {
   instances: 3,
+  itemsToRender: 10,
   showForm: true,
   showMatchingString: true,
   animations: true,
+  autoFill: true
 };
 
 //initialValues

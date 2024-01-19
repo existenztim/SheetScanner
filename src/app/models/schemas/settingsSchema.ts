@@ -5,6 +5,10 @@ export const settingsSchema = new Schema({
     type: Number,
     required: true,
   },
+  itemsToRender: {
+    type: Number,
+    required: true,
+  },
   showForm: {
     type: Boolean,
     required: true,
@@ -14,6 +18,10 @@ export const settingsSchema = new Schema({
     required: true,
   },
   animations: {
+    type: Boolean,
+    required: true,
+  },
+  autoFill: {
     type: Boolean,
     required: true,
   },
