@@ -9,20 +9,69 @@
   scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  /* :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 199, 230, 196; /* Light green 
-    --background-end-rgb: 255, 255, 255; /* White 
-  } */
-}
-
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
-/* Sets the min height of the entire application minus the fixed navbar (24px by default) */
+button,
+a {
+  color: white; 
+  border: none;
+  padding: 0.7rem 1.5rem; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+.sheetScanner-hover:not(:disabled):hover,
+.sheetScanner-hover:hover {
+  background-color: #45a049;
+}
+
+input,
+textarea {
+  display: block;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input:focus {
+  border-color: #45a049;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.active-route {
+  border-bottom: 5px solid rgb(236, 186, 18);
+}
+.sheetScanner-nav-links,
+.sheetScanner-note-links {
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+.sheetScanner-nav-links:hover {
+  color: white;
+  transition: transform 0.3s, background-color 0.3s;
+  transform: scale(1.1);
+}
+
+.sheetScanner-note-links:hover {
+  transition: transform 0.3s, box-shadow 0.3s;
+  transform: scale(1.03) translateY(-4px); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
 .sheetscanner-child-height {
   min-height: calc(100vh - 24px);
 }

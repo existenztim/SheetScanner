@@ -7,7 +7,7 @@ const AboutApp = () => {
   return (
     <>
           <div
-        className='fadein flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
+        className='sheetscanner-fadein flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
       >
         <section className="flex flex-wrap mt-6 px-2 pb-4 min-h-screen  bg-slate-100 rounded-t-xl">
           <div className="flex items-center w-full lg:w-1/2">

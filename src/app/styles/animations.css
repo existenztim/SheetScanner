@@ -1,4 +1,65 @@
 /* The following file contains custom classes with animations */
+.sheetscanner-hit-container-enter {
+  opacity: 0;
+  transform: translateY(-40px);
+  transform: scale(0.5); 
+}
+
+.sheetscanner-hit-container-enter-active {
+  opacity: 1;
+  transform: scale(1); 
+  transition: transform 0.4s ease, opacity 0.4s ease; 
+}
+
+.sheetscanner-hit-container-exit {
+  opacity: 1;
+  transform: scale(1); 
+}
+
+.sheetscanner-hit-container-exit-active {
+  opacity: 0;
+  transform: scale(0.5) translateY(40px); 
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.sheetscanner-loader {
+  animation: sheetscanner-loader 1s linear infinite;
+}
+
+.sheetscanner-fadeinFromTop {
+  animation: settingsSheetscanner-fadeinFromTop 0.3s ease-in-out;
+}
+
+.sheetscanner-stats-paragraph {
+  transform: translateX(-200px);
+  animation: sheetscanner-fadeinFromLeft 1.5s ease forwards;
+}
+
+.sheetscanner-stats-paragraph:nth-child(2) {
+  animation: sheetscanner-fadeinFromRight 1.5s ease forwards;
+}
+
+.sheetscanner-property-value {
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.sheetscanner-property-value:hover {
+  transform: scale(1.02);
+  background-color: rgb(55, 156, 55);
+}
+
+.sheetscanner-start-type,
+.sheetscanner-start-upload {
+  opacity: 0;
+  transform: translateY(-200px);
+  animation: sheetscanner-fadeinFromBottom 1.5s ease forwards;
+}
+
+.sheetscanner-input-row {
+  transform: translateY(-20px);
+  animation: sheetscanner-fadeinFromLeft 0.5s ease-in-out forwards;
+}
+
 .sheetscanner-highlighted {
   padding: 0.2rem;
 }
@@ -11,13 +72,20 @@
   right: 0;
   bottom: 0;
   border: 2px solid gold;
-  animation: clippath 3s infinite linear;
+  animation: sheetscanner-clippath 3s infinite linear;
+}
+.sheetscanner-form-response {
+  animation: sheetscanner-fadeinFromTop 0.5s ease-in-out forwards;
+}
+
+.sheetscanner-fadein {
+  animation: sheetscanner-fadein 0.3s ease-in-out;
 }
 
 
-.fadein {
-  animation: fadeIn 0.3s ease-in-out;
-}
+/**************************************************************/
+/*                        Keyframes */
+/**************************************************************/
 
 @keyframes sheetscanner-loader {
   0% {
@@ -30,7 +98,7 @@
   }
 }
 
-@keyframes fadeIn {
+@keyframes sheetscanner-fadein {
   0% {
     opacity: 0;
   }
@@ -39,7 +107,51 @@
   }
 }
 
-@keyframes clippath {
+@keyframes sheetscanner-fadeinFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(-200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetscanner-fadeinFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheetscanner-fadeinFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes settingsSheetscanner-fadeinFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetscanner-clippath {
   0%,
   100% {
     clip-path: inset(0 0 95% 0);
