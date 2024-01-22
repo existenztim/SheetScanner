@@ -8,14 +8,12 @@ const ScannerRedirect = () => {
   const router = useRouter();
   const { user } = GlobalContext();
   const displayName = removeBlankSpace(user?.displayName);
+  const encodedDisplayName = encodeURIComponent(displayName || 'guest');
   useEffect(() => {
-    // Check if the user exists
-    console.log('you are being redirected');
+    console.log('you are being redirected', encodedDisplayName);
     if (user) {
-      // Redirect to scanner/user.displayName
-      router.push(`/scanner/${displayName}`);
+      router.push(`/scanner/${encodedDisplayName}`);
     } else {
-      // Redirect to scanner/guest
       router.push('/scanner/guest');
     }
   }, [user, router]);

@@ -146,7 +146,7 @@ const ExcelFileProcessor = ({
         <div className="flex-1 flex-wrap box-border p-4 m-1 border border-gray-300 rounded-lg bg-slate-50">
           <div className="border-b-2 border-gray-200">
             <div className="flex gap-4 items-center justify-start flex-wrap  md:justify-center">
-              <div className="flex max-w-xs">
+              <div id="scanner" className="scroll-mt-24 flex max-w-xs">
                 <label htmlFor="fileInput" className="flex items-start flex-col font-bold">
                   <div className="flex items-center gap-2">
                     <span>Select file</span>
@@ -168,7 +168,7 @@ const ExcelFileProcessor = ({
                     <MdAdfScanner />
                   </div>
                   <input
-                    className="max-w-xs"
+                    className="max-w-[220px]"
                     id="searchInput"
                     type="text"
                     placeholder="Search"
@@ -286,7 +286,7 @@ const ExcelFileProcessor = ({
         </div>
         {settings.showForm && (
           <div className="flex-1 box-border p-4 m-1 border border-gray-300 rounded-lg bg-slate-50">
-            <NotificationForm></NotificationForm>
+            <NotificationForm excelData={excelData} currentFile={fileName}></NotificationForm>
           </div>
         )}
         {wrongFileFormat && (

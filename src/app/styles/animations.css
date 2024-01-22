@@ -75,7 +75,7 @@
   animation: sheetscanner-clippath 3s infinite linear;
 }
 .sheetscanner-form-response {
-  animation: sheetscanner-fadeinFromTop 0.5s ease-in-out forwards;
+  animation: sheetscanner-fadeInFromTop 0.5s ease-in-out forwards;
 }
 
 .sheetscanner-fadein {
@@ -144,6 +144,17 @@
   from {
     opacity: 0;
     transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetscanner-fadeInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;

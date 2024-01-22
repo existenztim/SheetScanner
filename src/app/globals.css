@@ -53,6 +53,11 @@ input:focus {
 .active-route {
   border-bottom: 5px solid rgb(236, 186, 18);
 }
+
+.sheetscanner-mobile-shortcut {
+  padding: 0.5rem;
+}
+
 .sheetScanner-nav-links,
 .sheetScanner-note-links {
   color: white;

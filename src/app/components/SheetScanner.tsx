@@ -6,10 +6,8 @@ import SignInChoice from './SignInChoice';
 import { Carousel } from 'react-responsive-carousel';
 import ExcelFileProcessor from './ExcelFileProcessor';
 import * as XLSX from 'xlsx';
-
-interface IKeyValuePairs {
-  [propertyKey: string]: string | undefined;
-}
+import { MdFormatAlignJustify, MdOutlineSearch } from 'react-icons/md';
+import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
 
 const SheetScanner = () => {
   const {
@@ -45,6 +43,10 @@ const SheetScanner = () => {
     const guestFromLocalStorage = localStorage.getItem('guest');
     guestFromLocalStorage ? setGuest(true) : setGuest(false);
   }, [user]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const checkauth = async () => {
@@ -125,7 +127,11 @@ const SheetScanner = () => {
       ) : !user && !guest ? (
         <SignInChoice setGuestToTrue={setGuestToTrue} />
       ) : (
-        <div className="">
+        <div className="my-[5rem] sm:my-0">
+            <div className='flex flex-col gap-2 z-40 m-2 p-0 top-40 fixed right-1 md:hidden'>
+              <a className='sheetscanner-mobile-shortcut bg-green-700 text-slate-50 rounded-full' href="#scanner"><MdOutlineSearch /></a>
+              <a className='sheetscanner-mobile-shortcut bg-green-700 text-slate-50 rounded-full' href="#form"><MdFormatAlignJustify/></a>
+        </div>
           {settings.instances > 1 ? (
             <Carousel
               showThumbs={false}
