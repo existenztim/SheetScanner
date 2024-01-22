@@ -112,7 +112,7 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
             />
             <output>{tempSettings.instances}</output>
           </div>
-          <div className="flex items-center gap-2  border-b border-grey-500">
+          <div className="flex items-center gap-2 border-b border-grey-500">
             <label htmlFor="itemsToRender">Maximum hits to render:</label>
             <input 
               type="range" 
@@ -167,10 +167,10 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
           </div>
         </fieldset>
         <div className="flex gap-2 justify-end items-end w-full">
-          <button onClick={handleMenuToggle} className="bg-yellow-600 rounded">
+          <button onClick={handleMenuToggle} className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded">
             Cancel
           </button>
-          <button type="submit" className="bg-green-700 rounded">
+          <button type="submit" className="sheetScanner-hover bg-green-700 rounded">
             Confirm
           </button>
         </div>
