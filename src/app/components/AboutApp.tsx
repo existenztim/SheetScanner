@@ -32,10 +32,7 @@ const AboutApp = () => {
               </p>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link
-                  className="bg-green-700 rounded sheetScanner-hover"
-                  href={`/scanner/${encodedDisplayName}`}
-                >
+                <Link className="bg-green-700 rounded sheetScanner-hover" href={`/scanner/${encodedDisplayName}`}>
                   Check it out!
                 </Link>
                 <a className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded" href="#how">
@@ -113,10 +110,7 @@ const AboutApp = () => {
               </p>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link
-                  className="sheetScanner-hover bg-green-700 rounded"
-                  href={`/scanner/${encodedDisplayName}`}
-                >
+                <Link className="sheetScanner-hover bg-green-700 rounded" href={`/scanner/${encodedDisplayName}`}>
                   Check it out!
                 </Link>
                 <a href="#faq" className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded">
@@ -206,10 +200,7 @@ const AboutApp = () => {
               </div>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link
-                  className="bg-green-700 rounded sheetScanner-hover"
-                  href={`/scanner/${encodedDisplayName}`}
-                >
+                <Link className="bg-green-700 rounded sheetScanner-hover" href={`/scanner/${encodedDisplayName}`}>
                   Check it out!
                 </Link>
               </div>
@@ -242,4 +233,3 @@ const AboutApp = () => {
 };
 
 export default AboutApp;
-

@@ -32,7 +32,7 @@ const ExcelFileProcessor = ({
   const [fileName, setFileName] = useState<string>();
   const [sheetList, setSheetList] = useState<string[]>([]);
   const [workbook, setWorkbook] = useState<XLSX.WorkBook | null>(null);
-  const {settings, handleClipboardValue } = GlobalContext();
+  const { settings, handleClipboardValue } = GlobalContext();
   const [wrongFileFormat, setWrongFileFormat] = useState<string>('');
   const shortenedFileName = cutLongStrings(fileName, 30);
 
@@ -59,25 +59,25 @@ const ExcelFileProcessor = ({
 
   const parseAndSetExcelData = (file: File) => {
     const reader = new FileReader();
-  
-    reader.onload = (e) => {
+
+    reader.onload = e => {
       if (e.target !== null && e.target.result instanceof ArrayBuffer) {
         const data = e.target.result;
         const parsedWorkbook = XLSX.read(data, { type: 'array' });
         setWorkbook(parsedWorkbook);
-  
+
         const defaultSheetName = parsedWorkbook.SheetNames[0];
         setSheetList(parsedWorkbook.SheetNames);
-        
+
         const sheet = parsedWorkbook.Sheets[defaultSheetName];
         const jsonData: IKeyValuePairs[] = XLSX.utils.sheet_to_json(sheet, { header: 0 });
-        
+
         setFileName(file.name);
         setExcelData(jsonData);
       }
     };
 
-   return reader.readAsArrayBuffer(file);
+    return reader.readAsArrayBuffer(file);
   };
 
   useEffect(() => {
@@ -131,8 +131,8 @@ const ExcelFileProcessor = ({
   };
 
   const handleFileResponse = () => {
-    setWrongFileFormat('');   
-  }
+    setWrongFileFormat('');
+  };
 
   return (
     <>
@@ -237,48 +237,57 @@ const ExcelFileProcessor = ({
           </div>
 
           <TransitionGroup className="card-list flex flex-col p-1 m-2 rounded-2xl overflow-auto max-h-[80vh]">
-            {filteredData.slice(0, settings.itemsToRender).map((item, index) => ( // instead of 0 add pagination?
-              <CSSTransition
-                key={index}
-                classNames={settings.animations ? 'sheetscanner-hit-container' : ''}
-                timeout={600}
-                in={filteredDataChanged} // Add the "in" prop to trigger the animation
-                unmountOnExit // Remove the element from the DOM when it exits
-              >
-                <div className="">
-                  <ul className="object-card flex flex-col justify-center relative p-2 m-4 rounded bg-green-700 shadow-md">
-                    <h2 className="hit-header font-bold text-gray-200">Hit no: {index + 1}</h2>
-                    {Object.keys(item).map(propertyKey => (
-                      <li
-                        className="object-row flex flex-col justify-center odd:bg-gray-100 even:bg-gray-300 md:flex-row"
-                        key={propertyKey}
-                      >
-                        <p className="property-key font-bold text-left pr-4 m-1 min-w-[150px]">{propertyKey}:</p>
-                        <div className="sheetscanner-property-value-container flex-1">
-                          <p
-                            className="sheetscanner-property-value text-left cursor-copy m-1 opacity-95 border-[1px] border-slate-200 shadow-md hover:text-gray-200"
-                            onClick={handleClipboard(propertyKey)}
-                          >
-                            {item[propertyKey]}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </CSSTransition>
-            ))}
+            {filteredData.slice(0, settings.itemsToRender).map(
+              (
+                item,
+                index // instead of 0 add pagination?
+              ) => (
+                <CSSTransition
+                  key={index}
+                  classNames={settings.animations ? 'sheetscanner-hit-container' : ''}
+                  timeout={600}
+                  in={filteredDataChanged} // Add the "in" prop to trigger the animation
+                  unmountOnExit // Remove the element from the DOM when it exits
+                >
+                  <div className="">
+                    <ul className="object-card flex flex-col justify-center relative p-2 m-4 rounded bg-green-700 shadow-md">
+                      <h2 className="hit-header font-bold text-gray-200">Hit no: {index + 1}</h2>
+                      {Object.keys(item).map(propertyKey => (
+                        <li
+                          className="object-row flex flex-col justify-center odd:bg-gray-100 even:bg-gray-300 md:flex-row"
+                          key={propertyKey}
+                        >
+                          <p className="property-key font-bold text-left pr-4 m-1 min-w-[150px]">{propertyKey}:</p>
+                          <div className="sheetscanner-property-value-container flex-1">
+                            <p
+                              className="sheetscanner-property-value text-left cursor-copy m-1 opacity-95 border-[1px] border-slate-200 shadow-md hover:text-gray-200"
+                              onClick={handleClipboard(propertyKey)}
+                            >
+                              {item[propertyKey]}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </CSSTransition>
+              )
+            )}
           </TransitionGroup>
           {searchTerms && filteredData.length === 0 && (
-            <p className="no-matches flex justify-center items-center font-bold my-20 mx-0">No matches found.</p>
+            <p
+              className={`${
+                settings.animations && 'sheetscanner-start-type'
+              } flex justify-center items-center font-bold my-20 mx-0`}
+            >
+              No matches found.
+            </p>
           )}
           {!searchTerms && fileName && (
             <p
-              className={
-                settings.animations
-                  ? 'sheetscanner-start-type flex justify-center items-center font-bold my-20 mx-0'
-                  : 'flex justify-center items-center font-bold my-20 mx-0'
-              }
+              className={`${
+                settings.animations && 'sheetscanner-start-type'
+              }flex justify-center items-center font-bold my-20 mx-0`}
             >
               Start typing to find a match.
             </p>
@@ -289,11 +298,8 @@ const ExcelFileProcessor = ({
             <NotificationForm excelData={excelData} currentFile={fileName}></NotificationForm>
           </div>
         )}
-        {wrongFileFormat && (
-        <AlertModal errorMessage={wrongFileFormat} closeAlertModal={handleFileResponse} />
-      )}
-        
-      </main>   
+        {wrongFileFormat && <AlertModal errorMessage={wrongFileFormat} closeAlertModal={handleFileResponse} />}
+      </main>
     </>
   );
 };

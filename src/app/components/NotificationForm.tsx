@@ -137,7 +137,9 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
 
   return (
     <>
-      <h3 id="form" className="scroll-mb-[25rem] font-bold text-gray-800 text-lg border-b-2 border-gray-200">Save Notification</h3>
+      <h3 id="form" className="scroll-mb-[25rem] font-bold text-gray-800 text-lg border-b-2 border-gray-200">
+        Save Notification
+      </h3>
       <form className="sheetscanner-notification-form mt-2" onSubmit={handleNotesSubmit} onReset={resetForm}>
         <div
           key={'title'}
