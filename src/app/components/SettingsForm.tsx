@@ -174,10 +174,13 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
             </div>
           </fieldset>
           <div className="flex gap-2 justify-end items-end w-full">
-            <button onClick={handleMenuToggle} className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded">
+            <button
+              onClick={handleMenuToggle}
+              className="sheetScanner-standard-link bg-yellow-600 text-gray-800 hover:text-gray-50 rounded"
+            >
               Cancel
             </button>
-            <button type="submit" className="sheetScanner-hover bg-green-700 rounded">
+            <button type="submit" className="sheetScanner-standard-link sheetScanner-hover bg-green-700 rounded">
               Confirm
             </button>
           </div>

@@ -201,11 +201,16 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
           )}
         </div>
         <div className="flex justify-end gap-2 mt-2">
-          <button className="bg-yellow-600 rounded text-gray-800 hover:text-gray-50" type="reset">
+          <button
+            className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 hover:text-gray-50"
+            type="reset"
+          >
             Reset form
           </button>
           <button
-            className={`rounded ${excelData.length < 1 ? 'bg-gray-400 text-gray-600' : 'bg-green-600 text-white'}`}
+            className={`rounded sheetScanner-standard-link ${
+              excelData.length < 1 ? 'bg-gray-400 text-gray-600' : 'bg-green-600 text-white'
+            }`}
             disabled={excelData.length < 1}
             type="submit"
           >

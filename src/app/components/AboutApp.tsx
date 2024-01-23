@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { GlobalContext } from './ParentProvider';
 import { removeBlankSpace } from '../utils/stringManipulation';
 import { FaGithub } from 'react-icons/fa';
+
 const AboutApp = () => {
   const { user, settings } = GlobalContext();
   const displayName = removeBlankSpace(user?.displayName);
@@ -14,7 +15,7 @@ const AboutApp = () => {
         className={
           settings.animations
             ? 'sheetscanner-fadein flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
-            : 'flex flex-col justify-center items-center'
+            : 'flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
         }
       >
         <section className="flex flex-wrap mt-6 px-2 pb-4 min-h-screen  bg-slate-100 rounded-t-xl">
@@ -32,10 +33,16 @@ const AboutApp = () => {
               </p>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link className="bg-green-700 rounded sheetScanner-hover" href={`/scanner/${encodedDisplayName}`}>
+                <Link
+                  className="sheetScanner-standard-link bg-green-700 rounded text-slate-50 sheetScanner-hover"
+                  href={`/scanner/${encodedDisplayName}`}
+                >
                   Check it out!
                 </Link>
-                <a className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded" href="#how">
+                <a
+                  className="sheetScanner-standard-link bg-yellow-600 text-gray-800 hover:text-gray-50 rounded"
+                  href="#how"
+                >
                   Tell me how it works
                 </a>
 
@@ -110,10 +117,16 @@ const AboutApp = () => {
               </p>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link className="sheetScanner-hover bg-green-700 rounded" href={`/scanner/${encodedDisplayName}`}>
+                <Link
+                  className="sheetScanner-standard-link sheetScanner-hover text-slate-50 bg-green-700 rounded"
+                  href={`/scanner/${encodedDisplayName}`}
+                >
                   Check it out!
                 </Link>
-                <a href="#faq" className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded">
+                <a
+                  href="#faq"
+                  className="sheetScanner-standard-link bg-yellow-600 text-gray-800 hover:text-gray-50 rounded"
+                >
                   Common questions
                 </a>
               </div>
@@ -200,7 +213,10 @@ const AboutApp = () => {
               </div>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link className="bg-green-700 rounded sheetScanner-hover" href={`/scanner/${encodedDisplayName}`}>
+                <Link
+                  className="sheetScanner-standard-link bg-green-700 text-slate-50 rounded sheetScanner-hover"
+                  href={`/scanner/${encodedDisplayName}`}
+                >
                   Check it out!
                 </Link>
               </div>

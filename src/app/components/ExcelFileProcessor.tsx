@@ -177,7 +177,10 @@ const ExcelFileProcessor = ({
                     disabled={!fileName}
                   />
                 </label>
-                <button className="bg-yellow-600 rounded text-gray-800 hover:text-gray-50" onClick={handleReset}>
+                <button
+                  className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 hover:text-gray-50"
+                  onClick={handleReset}
+                >
                   Clear
                 </button>
               </div>

@@ -11,7 +11,10 @@ const AlertModal = ({ errorMessage, closeAlertModal }: AlertModalProps) => {
           <p className="mt-4 text-gray-800">{errorMessage}</p>
         </div>
         <div className="mt-4 flex space-x-4 justify-end">
-          <button className="bg-yellow-600 rounded text-gray-800 py-2 hover:text-gray-50" onClick={closeAlertModal}>
+          <button
+            className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 py-2 hover:text-gray-50"
+            onClick={closeAlertModal}
+          >
             Ok
           </button>
         </div>
