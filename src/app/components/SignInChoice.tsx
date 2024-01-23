@@ -33,10 +33,16 @@ const SignInChoice = ({ setGuestToTrue }: SingInChoiceProps) => {
         </div>
 
         <div className="mt-4 flex space-x-4 justify-end">
-          <button className="bg-slate-200 rounded text-green-700 py-2" onClick={handleGuestLogin}>
+          <button
+            className="sheetScanner-standard-link bg-slate-200 rounded text-green-700 py-2"
+            onClick={handleGuestLogin}
+          >
             Continue as guest
           </button>
-          <button className="bg-green-700 rounded text-white py-2" onClick={initializeSignIn}>
+          <button
+            className=" sheetScanner-standard-link bg-green-700 rounded text-white py-2"
+            onClick={initializeSignIn}
+          >
             Sign in with Gmail
           </button>
         </div>

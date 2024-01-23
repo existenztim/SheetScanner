@@ -50,7 +50,7 @@ const NotesList = () => {
   const arrayToMap = searchTerms ? filteredData : noteList;
 
   return (
-    <div className=" bg-slate-50 w-full min-h-[calc(100vh-3.5rem)]">
+    <div className=" bg-slate-50 bg-opacity-60 w-full min-h-[calc(100vh-3.5rem)]">
       <div
         className={`${
           settings.animations && 'sheetscanner-fadein'
