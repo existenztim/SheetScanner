@@ -289,7 +289,7 @@ const ExcelFileProcessor = ({
           {!searchTerms && fileName && (
             <p
               className={`${
-                settings.animations && 'sheetscanner-start-type'
+                settings.animations ? 'sheetscanner-start-type ' : ''
               }flex justify-center items-center font-bold my-20 mx-0`}
             >
               Start typing to find a match.

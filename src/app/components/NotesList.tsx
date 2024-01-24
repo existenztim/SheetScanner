@@ -8,13 +8,24 @@ import { scanData } from '../utils/scanData';
 import axios from 'axios';
 import { API_URLS } from '../models/ApiRoutes';
 import { INote } from '../models/interfaces/INote';
+import CustomPagination from './CustomPagination';
 
 const NotesList = () => {
   const { user, notes, BASE_URL, settings } = GlobalContext();
   const [searchTerms, setSearchTerms] = useState<string>('');
   const [noteList, setNoteList] = useState<INote[]>(notes);
-  // We cant use only the global context (notes here) because it will not have the updated DB id for each note
-  //can man använda roter.refresh ist?
+  const [currentPage, setCurrentPage] = useState(1);
+  const notesPerPage = 10;
+
+  const filteredData = useMemo(() => {
+    return scanData(notes, searchTerms);
+  }, [notes, searchTerms]);
+
+  const indexOfLastNote = currentPage * notesPerPage;
+  const indexOfFirstNote = indexOfLastNote - notesPerPage;
+  const arrayToMap = searchTerms ? filteredData : noteList;
+  const currentNotes = arrayToMap.slice(indexOfFirstNote, indexOfLastNote);
+
   useEffect(() => {
     const fetchLatestNotes = async () => {
       const data = {
@@ -27,7 +38,7 @@ const NotesList = () => {
           setNoteList(response.data);
         }
       } catch (error) {
-        console.log('postToDatabase', error);
+        console.log('postToDatabase', error); // handle error (e.g., show alert modal)
       }
     };
     fetchLatestNotes();
@@ -35,22 +46,22 @@ const NotesList = () => {
 
   const displayName = removeBlankSpace(user?.displayName);
 
-  const filteredData = useMemo(() => {
-    return scanData(notes, searchTerms);
-  }, [notes, searchTerms]);
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerms(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleReset = () => {
     setSearchTerms('');
+    setCurrentPage(1);
   };
 
-  const arrayToMap = searchTerms ? filteredData : noteList;
-
   return (
-    <div className=" bg-slate-50 bg-opacity-60 w-full min-h-[calc(100vh-3.5rem)]">
+    <div className="bg-slate-50 bg-opacity-60 w-full min-h-[calc(100vh-3.5rem)]">
       <div
         className={`${
           settings.animations && 'sheetscanner-fadein'
@@ -77,7 +88,18 @@ const NotesList = () => {
           >
             Clear
           </button>
+          <div className="mt-4 flex justify-center mx-auto lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:top-28">
+            <div className="flex justify-center">
+              <CustomPagination
+                currentPage={currentPage}
+                totalItems={arrayToMap.length}
+                itemsPerPage={notesPerPage}
+                paginate={paginate}
+              />
+            </div>
+          </div>
         </div>
+
         {arrayToMap.length === 0 && (
           <p
             className={`${
@@ -87,9 +109,10 @@ const NotesList = () => {
             No matches found.
           </p>
         )}
+
         <ul className="flex flex-col gap-2 justify-center text-center mt-4">
           <TransitionGroup className="gap-2 flex flex-col">
-            {arrayToMap.map((note, index) => (
+            {currentNotes.map((note, index) => (
               <CSSTransition
                 key={index}
                 classNames={settings.animations ? 'sheetscanner-hit-container' : ''}
@@ -134,8 +157,18 @@ const NotesList = () => {
               </CSSTransition>
             ))}
           </TransitionGroup>
-          {notes.length === 0 && <p>Nothing to show.</p>}
+          {notes.length === 0 && (
+            <p className="flex justify-center items-center font-bold my-20 mx-0">Nothing to show.</p>
+          )}
         </ul>
+        <div className="mt-4">
+          <CustomPagination
+            currentPage={currentPage}
+            totalItems={arrayToMap.length}
+            itemsPerPage={notesPerPage}
+            paginate={paginate}
+          />
+        </div>
       </div>
     </div>
   );
