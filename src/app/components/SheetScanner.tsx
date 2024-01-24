@@ -128,10 +128,14 @@ const SheetScanner = () => {
         <SignInChoice setGuestToTrue={setGuestToTrue} />
       ) : (
         <div className="my-[5rem] sm:my-0">
-            <div className='flex flex-col gap-2 z-40 m-2 p-0 top-40 fixed right-1 md:hidden'>
-              <a className='sheetscanner-mobile-shortcut bg-green-700 text-slate-50 rounded-full' href="#scanner"><MdOutlineSearch /></a>
-              <a className='sheetscanner-mobile-shortcut bg-green-700 text-slate-50 rounded-full' href="#form"><MdFormatAlignJustify/></a>
-        </div>
+          <div className="flex flex-col gap-2 z-40 m-2 p-0 top-40 fixed right-1 md:hidden">
+            <a className="sheetscanner-mobile-shortcut bg-green-700 text-slate-50 rounded-full" href="#scanner">
+              <MdOutlineSearch />
+            </a>
+            <a className="sheetscanner-mobile-shortcut bg-green-700 text-slate-50 rounded-full" href="#form">
+              <MdFormatAlignJustify />
+            </a>
+          </div>
           {settings.instances > 1 ? (
             <Carousel
               showThumbs={false}

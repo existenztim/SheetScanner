@@ -137,7 +137,9 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
 
   return (
     <>
-      <h3 id="form" className="scroll-mb-[25rem] font-bold text-gray-800 text-lg border-b-2 border-gray-200">Save Notification</h3>
+      <h3 id="form" className="scroll-mb-[25rem] font-bold text-gray-800 text-lg border-b-2 border-gray-200">
+        Save Notification
+      </h3>
       <form className="sheetscanner-notification-form mt-2" onSubmit={handleNotesSubmit} onReset={resetForm}>
         <div
           key={'title'}
@@ -199,11 +201,16 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
           )}
         </div>
         <div className="flex justify-end gap-2 mt-2">
-          <button className="bg-yellow-600 rounded text-gray-800 hover:text-gray-50" type="reset">
+          <button
+            className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 hover:text-gray-50"
+            type="reset"
+          >
             Reset form
           </button>
           <button
-            className={`rounded ${excelData.length < 1 ? 'bg-gray-400 text-gray-600' : 'bg-green-600 text-white'}`}
+            className={`rounded sheetScanner-standard-link ${
+              excelData.length < 1 ? 'bg-gray-400 text-gray-600' : 'bg-green-600 text-white'
+            }`}
             disabled={excelData.length < 1}
             type="submit"
           >

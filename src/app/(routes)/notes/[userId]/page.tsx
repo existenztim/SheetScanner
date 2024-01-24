@@ -1,7 +1,7 @@
-
+import NotesList from '@/app/components/NotesList';
 
 const page = () => {
-  return <p>Gör en noteList komp</p>;
+  return <NotesList />;
 };
 
 export default page;

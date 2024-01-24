@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import AboutApp from '../src/app/components/AboutApp';
+
 describe('AboutApp component', () => {
   test('should have an h2 tag with text "Welcome to SheetScanner!"', () => {
     render(<AboutApp />);

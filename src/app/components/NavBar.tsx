@@ -1,11 +1,5 @@
 'use client';
-import {
-  MdOutlineAdfScanner,
-  MdArticle,
-  MdCancel,
-  MdHomeFilled,
-  MdOutlineSettings,
-} from 'react-icons/md';
+import { MdOutlineAdfScanner, MdArticle, MdCancel, MdHomeFilled, MdOutlineSettings } from 'react-icons/md';
 import '.././styles/animations.css';
 import axios from 'axios';
 import { CgMenuGridR } from 'react-icons/cg';
@@ -48,7 +42,7 @@ const Navbar = () => {
     } else {
       setLoginHandled(false);
     }
-  }, [user]); 
+  }, [user]);
 
   useEffect(() => {
     const checkauth = async () => {
@@ -91,20 +85,15 @@ const Navbar = () => {
     <>
       <header className="bg-green-800 text-slate-100 w-full h-14 m-0 fixed top-0 left-0 z-50 p-0 justify-center items-center flex">
         <div className="fixed left-2 bg-green-700 rounded-full border-slate-50 border-2">
-        <Link
-            className="p-0 m-0"
-            href={'/'}
-            aria-label="Go to the home view."
-          >
+          <Link className="p-0 m-0" href={'/'} aria-label="Go to the home view.">
             <Image
-            className=""
-            src="/images/ssicon.png"
-            alt="The letter S representing Sheetscanner, above a spreadsheet."
-            width={35}
-            height={35}
-          />
+              className=""
+              src="/images/ssicon.png"
+              alt="The letter S representing Sheetscanner, above a spreadsheet."
+              width={35}
+              height={35}
+            />
           </Link>
-          
         </div>
         <div className="flex items-center text-4xl gap-4 z-50">
           <Link className="sheetScanner-nav-links sheetScanner-hover" href={'/'} aria-label="Go to home view.">
@@ -144,7 +133,9 @@ const Navbar = () => {
               Welcome: <span>{user ? user.displayName : 'guest'}</span>
             </p>
           )}
-          <div className='hidden md:flex'><AuthenticationToggle/></div>
+          <div className="hidden md:flex">
+            <AuthenticationToggle />
+          </div>
           <button
             onClick={handleMenuToggle}
             aria-label="Open the settings menu"
