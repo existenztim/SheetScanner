@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { GlobalContext } from './ParentProvider';
 import Link from 'next/link';
 import { MdKeyboardReturn, MdDelete, MdOutlineSave, MdEdit, MdLock } from 'react-icons/md';
-import { getDate, removeBlankSpace } from '../utils/stringManipulation';
+import { cutLongStrings, getDate, removeBlankSpace } from '../utils/stringManipulation';
 import { INote } from '../models/interfaces/INote';
 import { API_URLS } from '../models/ApiRoutes';
 import axios from 'axios';
@@ -37,7 +37,7 @@ const NoteEditor = () => {
   const [redirectAfterDelete, setRedirectAfterDelete] = useState(false);
   const [modal, setModal] = useState<Imodal>({
     message: '',
-    type: 'error',
+    type: FormResponseTypes.ERROR,
   });
 
   const fetchCurrentNote = async () => {
@@ -144,7 +144,7 @@ const NoteEditor = () => {
     try {
       const response = await axios.put<INote[]>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
       setUserNotes(response.data);
-      handleModalResponse(FormResponseTexts.SUCCESS, FormResponseTypes.SUCCESS);
+      handleModalResponse(FormResponseTexts.SUCCESS_NOTE, FormResponseTypes.SUCCESS);
       fetchCurrentNote();
     } catch (error) {
       handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
@@ -182,7 +182,7 @@ const NoteEditor = () => {
             }xl:flex-col max-w-[1500px] min-h-[calc(100vh-13rem)] justify-center text-center items-center mx-auto p-4 border border-gray-300 rounded-lg bg-slate-50 mb-32`}
           >
             {' '}
-            <div className="flex bg-slate-200 p-2 rounded-md mb-4 gap-2 justify-start flex-col items-centers w-full flex-wrap lg:justify-center lg:flex-row">
+            <div className="flex bg-slate-200 p-2 rounded-md mb-4 gap-2 justify-start flex-col items-centers w-full flex-wrap lg:justify-evenly lg:flex-row">
               <p className="text-left flex text-gray-800 font-bold gap-2">
                 Created: <span className="font-normal">{note.createDate}</span>
               </p>
@@ -190,7 +190,11 @@ const NoteEditor = () => {
                 last updated: <span className="font-normal"> {note.lastUpdated ? note.lastUpdated : '-'}</span>
               </p>
               <p className="text-left flex text-gray-800 font-bold gap-2">
-                File name: <span className="font-normal"> {note.fileName}</span>
+                File name:{' '}
+                <span className="font-normal">
+                  {' '}
+                  {note.fileName?.length ? cutLongStrings(note.fileName, 24) : note.fileName ?? 'Default Value'}
+                </span>
               </p>
             </div>
             <form className="sheetscanner-notification-form flex gap-2 flex-col">

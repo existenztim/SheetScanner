@@ -52,7 +52,7 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
   useEffect(() => {
     if (formResponse) {
       setFormResponseClass(
-        formResponse === FormResponseTexts.SUCCESS
+        formResponse === FormResponseTexts.SUCCESS_NOTE
           ? 'sheetscanner-form-response p-4 text-sm text-green-400 rounded-lg bg-slate-200'
           : 'sheetscanner-form-response p-4 text-sm text-red-400 rounded-lg bg-slate-200 fade-out'
       );
@@ -104,7 +104,7 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
           { type: inputValues, createDate: getDate(), fileName: currentFile ?? '', title: noteTitle },
         ]);
         setNoteTitle('');
-        setFormResponse(FormResponseTexts.SUCCESS);
+        setFormResponse(FormResponseTexts.SUCCESS_NOTE);
         initialInputValues();
         handleResponseReset();
       }

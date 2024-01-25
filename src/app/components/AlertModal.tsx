@@ -29,7 +29,7 @@ const AlertModal = ({ modal, closeAlertModal }: AlertModalProps) => {
       break;
   }
   return (
-    <div className="flex items-center justify-center h-screen w-screen top-[-6rem] fixed z-40 bg-slate-100 bg-opacity-50 p-0 m-0">
+    <div className="flex items-center justify-center h-screen w-screen top-[-3rem] fixed z-40 bg-slate-100 bg-opacity-50 p-0 m-0">
       <div className="w-96 p-4 bg-white rounded-lg shadow-lg">
         <div className="flex flex-col items-stretch justify-center">
           <h4 className={`font-bold text-lg w-full border-b border-grey-500 ${color}`}>{text}</h4>

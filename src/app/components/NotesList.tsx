@@ -100,7 +100,7 @@ const NotesList = () => {
           </div>
         </div>
 
-        {arrayToMap.length === 0 && (
+        {arrayToMap.length === 0 && notes.length !== 0 && (
           <p
             className={`${
               settings.animations && 'sheetscanner-start-type'

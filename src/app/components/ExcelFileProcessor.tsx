@@ -47,6 +47,7 @@ const ExcelFileProcessor = ({
     const sizeLimit = 3000 * 1024; //3000kb
 
     if (file.type !== FileFormat.CSV && file.type !== FileFormat.XLS && file.type !== FileFormat.XLSX) {
+      //gör samma som i de övriga filerna (settingsform och noteEditor)
       setModal(prevValue => ({
         ...prevValue,
         message: 'Wrong file format uploaded!',
