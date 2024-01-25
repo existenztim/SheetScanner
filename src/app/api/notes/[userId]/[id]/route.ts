@@ -53,8 +53,15 @@ export async function PUT(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ message: 'Invalid user data' }, { status: 400 });
     }
-
-    return NextResponse.json(note, { status: 200 });
+    const existingUser = await MongooseUser.findOne({ 'user.uid': user.uid });
+    const noteIndex = existingUser.notes.findIndex((userNote: INote) => userNote._id == note._id);
+    if (noteIndex !== -1) {
+      existingUser.notes[noteIndex] = note;
+    } else {
+      return NextResponse.json({ message: 'Note not found for the user' }, { status: 404 });
+    }
+    await existingUser.save();
+    return NextResponse.json(existingUser.notes, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ message: 'Server Error' }, { status: 500 });
