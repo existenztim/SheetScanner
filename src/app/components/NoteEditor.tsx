@@ -8,6 +8,9 @@ import { getDate, removeBlankSpace } from '../utils/stringManipulation';
 import { INote } from '../models/interfaces/INote';
 import { API_URLS } from '../models/ApiRoutes';
 import axios from 'axios';
+import AlertModal from './AlertModal';
+import { Imodal } from '../models/interfaces/IModal';
+import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 
 interface InputValues {
   [propertyKey: string]: string;
@@ -32,26 +35,31 @@ const NoteEditor = () => {
   const [loading, setLoading] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [redirectAfterDelete, setRedirectAfterDelete] = useState(false);
+  const [modal, setModal] = useState<Imodal>({
+    message: '',
+    type: 'error',
+  });
+
+  const fetchCurrentNote = async () => {
+    const data = {
+      user: user,
+      noteId: id,
+    };
+    setLoading(true);
+    try {
+      const response = await axios.post<INote>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
+      if (response.status === 200) {
+        setNote(response.data);
+        setInputValues(response.data.type);
+      }
+    } catch (error) {
+      console.log('postToDatabase', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCurrentNote = async () => {
-      const data = {
-        user: user,
-        noteId: id,
-      };
-      setLoading(true);
-      try {
-        const response = await axios.post<INote>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
-        if (response.status === 200) {
-          setNote(response.data);
-          setInputValues(response.data.type);
-        }
-      } catch (error) {
-        console.log('postToDatabase', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchCurrentNote();
   }, [BASE_URL, user, id, displayName]);
 
@@ -81,6 +89,13 @@ const NoteEditor = () => {
     setConfirmDelete(false);
   };
 
+  const handleModalResponse = (message: string, type: string) => {
+    setModal({
+      message: message,
+      type: type,
+    });
+  };
+
   const handleDeleteNote = async () => {
     const config = {
       data: {
@@ -107,6 +122,9 @@ const NoteEditor = () => {
   };
 
   const handleSaveUpdatedNote = async () => {
+    if (note.title.length < 3) {
+      return handleModalResponse(FormResponseTexts.WRONG_INPUT, FormResponseTypes.INFORMATION);
+    }
     setNote(prevNote => ({
       ...prevNote,
       type: {
@@ -123,13 +141,13 @@ const NoteEditor = () => {
     };
 
     setLoading(true);
-    console.log(data.note.type);
     try {
       const response = await axios.put<INote[]>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
       setUserNotes(response.data);
-      console.log(response.data);
+      handleModalResponse(FormResponseTexts.SUCCESS, FormResponseTypes.SUCCESS);
+      fetchCurrentNote();
     } catch (error) {
-      console.log('deleteToDatabase', error);
+      handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
     } finally {
       setLoading(false);
     }
@@ -137,9 +155,9 @@ const NoteEditor = () => {
 
   return (
     <>
-      {note._id ? (
+      {note._id && (
         <>
-          <div
+          <section
             className={`${editMode && settings.animations ? 'sheetscanner-highlighted ' : ''}${
               !editMode
                 ? 'bg-slate-200 z-10 fixed top-14 w-screen p-1 text-gray-800 font-bold'
@@ -156,14 +174,25 @@ const NoteEditor = () => {
               </Link>
               <p className="text-center">{!editMode ? 'View-mode' : 'Edit-mode'}</p>
             </div>
-          </div>
+          </section>
 
-          <div
+          <section
             className={`${
               settings.animations && 'sheetscanner-fadein'
             }xl:flex-col max-w-[1500px] min-h-[calc(100vh-13rem)] justify-center text-center items-center mx-auto p-4 border border-gray-300 rounded-lg bg-slate-50 mb-32`}
           >
             {' '}
+            <div className="flex bg-slate-200 p-2 rounded-md mb-4 gap-2 justify-start flex-col items-centers w-full flex-wrap lg:justify-center lg:flex-row">
+              <p className="text-left flex text-gray-800 font-bold gap-2">
+                Created: <span className="font-normal">{note.createDate}</span>
+              </p>
+              <p className="text-left flex text-gray-800 font-bold gap-2">
+                last updated: <span className="font-normal"> {note.lastUpdated ? note.lastUpdated : '-'}</span>
+              </p>
+              <p className="text-left flex text-gray-800 font-bold gap-2">
+                File name: <span className="font-normal"> {note.fileName}</span>
+              </p>
+            </div>
             <form className="sheetscanner-notification-form flex gap-2 flex-col">
               <div className={settings.animations ? 'sheetscanner-input-row flex items-center' : 'flex items-center'}>
                 <label className="text-left flex text-gray-800 font-bold mr-2 min-w-[150px]" htmlFor="title">
@@ -214,13 +243,16 @@ const NoteEditor = () => {
                 </div>
               ))}
             </form>
-          </div>
+          </section>
         </>
-      ) : (
+      )}
+
+      {loading && (
         <div className="fixed w-screen h-screen z-50 text-4xl pb-72 items-center justify-center flex flex-col gap-2">
           <span className="sheetscanner-loader w-12 h-12 rounded-full border-t-4 border-b-gray-300 border-4  border-green-600"></span>
         </div>
       )}
+
       {confirmDelete && (
         <div className="flex items-center justify-center h-screen w-screen fixed top-14 z-40 bg-slate-100 bg-opacity-50">
           <div className="w-96 p-4 bg-white rounded-lg shadow-lg">
@@ -279,15 +311,15 @@ const NoteEditor = () => {
           </div>
         </div>
       )}
-      <div className="fixed w-full bottom-0 border-y-2 border-slate-200 left-1/2 transform -translate-x-1/2 flex flex-row items-center flex-wrap gap-2 justify-center bg-slate-100 py-4">
+      <section className="fixed w-full bottom-0 border-y-2 border-slate-200 left-1/2 transform -translate-x-1/2 flex flex-row items-center flex-wrap gap-2 justify-center bg-slate-100 py-4">
         <button
           className={`${
-            !note._id
+            !note._id || modal.message
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : ' sheetScanner-hover bg-green-700 text-slate-50'
           } sheetScanner-standard-link rounded w-32 flex gap-2 justify-center items-center`}
           onClick={handleEditMode}
-          disabled={!note._id}
+          disabled={!note._id || !!modal.message}
         >
           {!editMode ? (
             <>
@@ -301,25 +333,30 @@ const NoteEditor = () => {
         </button>
         <button
           className={`${
-            !note._id
+            !note._id || modal.message || !editMode
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : ' sheetScanner-hover bg-green-700 text-slate-50'
           } sheetScanner-standard-link rounded w-32 flex gap-2 justify-center items-center`}
           onClick={handleSaveNote}
-          disabled={!note._id}
+          disabled={!note._id || !!modal.message || !editMode}
         >
           Save <MdOutlineSave />
         </button>
         <button
           className={`${
-            !note._id ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : ' sheetScanner-hover bg-red-600 text-slate-50'
+            !note._id || modal.message
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : ' sheetScanner-hover bg-red-600 text-slate-50'
           } sheetScanner-standard-link rounded w-32 flex gap-2 justify-center items-center`}
           onClick={InitConfirmDeleteNote}
-          disabled={!note._id}
+          disabled={!note._id || !!modal.message}
         >
           Delete <MdDelete />
         </button>
-      </div>
+      </section>
+      {modal.message && (
+        <AlertModal modal={modal} closeAlertModal={() => handleModalResponse('', FormResponseTypes.ERROR)} />
+      )}
     </>
   );
 };

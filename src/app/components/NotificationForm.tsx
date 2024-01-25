@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { GlobalContext } from './ParentProvider';
 import { IUserData } from '../models/interfaces/IUser';
-import { FormResponse } from '../models/enums/EFormResponse';
+import { FormResponseTexts } from '../models/enums/EFormResponse';
 import axios from 'axios';
 import { API_URLS } from '../models/ApiRoutes';
 import { getDate } from '../utils/stringManipulation';
@@ -52,7 +52,7 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
   useEffect(() => {
     if (formResponse) {
       setFormResponseClass(
-        formResponse === FormResponse.SUCCESS
+        formResponse === FormResponseTexts.SUCCESS
           ? 'sheetscanner-form-response p-4 text-sm text-green-400 rounded-lg bg-slate-200'
           : 'sheetscanner-form-response p-4 text-sm text-red-400 rounded-lg bg-slate-200 fade-out'
       );
@@ -76,13 +76,13 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
     e.preventDefault();
 
     if (!user) {
-      setFormResponse(FormResponse.SIGNIN);
+      setFormResponse(FormResponseTexts.SIGNIN);
       handleResponseReset();
       return;
     }
 
     if (noteTitle.length < 3) {
-      setFormResponse(FormResponse.WRONG_INPUT);
+      setFormResponse(FormResponseTexts.WRONG_INPUT);
       handleResponseReset();
       return;
     }
@@ -104,13 +104,13 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
           { type: inputValues, createDate: getDate(), fileName: currentFile ?? '', title: noteTitle },
         ]);
         setNoteTitle('');
-        setFormResponse(FormResponse.SUCCESS);
+        setFormResponse(FormResponseTexts.SUCCESS);
         initialInputValues();
         handleResponseReset();
       }
     } catch (error) {
       console.log(error);
-      setFormResponse(FormResponse.ERROR);
+      setFormResponse(FormResponseTexts.ERROR);
     } finally {
       setLoading(false);
     }

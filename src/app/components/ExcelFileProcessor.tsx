@@ -10,6 +10,7 @@ import AlertModal from './AlertModal';
 import { cutLongStrings } from '../utils/stringManipulation';
 import { scanData } from '../utils/scanData';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
+import { Imodal } from '../models/interfaces/IModal';
 
 interface IExcelScannerProps {
   excelData: IKeyValuePairs[];
@@ -33,7 +34,11 @@ const ExcelFileProcessor = ({
   const [sheetList, setSheetList] = useState<string[]>([]);
   const [workbook, setWorkbook] = useState<XLSX.WorkBook | null>(null);
   const { settings, handleClipboardValue } = GlobalContext();
-  const [wrongFileFormat, setWrongFileFormat] = useState<string>('');
+  const [modal, setModal] = useState<Imodal>({
+    message: '',
+    type: 'error',
+  });
+
   const shortenedFileName = cutLongStrings(fileName, 30);
 
   const handleFileUpload = (e: XLSX.WorkSheet) => {
@@ -42,13 +47,21 @@ const ExcelFileProcessor = ({
     const sizeLimit = 3000 * 1024; //3000kb
 
     if (file.type !== FileFormat.CSV && file.type !== FileFormat.XLS && file.type !== FileFormat.XLSX) {
-      setWrongFileFormat('Wrong file format uploaded!');
+      setModal(prevValue => ({
+        ...prevValue,
+        message: 'Wrong file format uploaded!',
+        type: 'error',
+      }));
       fileUploaded.value = '';
       return;
     }
 
     if (file.size > sizeLimit) {
-      setWrongFileFormat('File size exceeds the allowed limit (3000kb).');
+      setModal(prevValue => ({
+        ...prevValue,
+        message: 'File size exceeds the allowed limit (3000kb)',
+        type: 'error',
+      }));
       fileUploaded.value = '';
       return;
     }
@@ -131,7 +144,10 @@ const ExcelFileProcessor = ({
   };
 
   const handleFileResponse = () => {
-    setWrongFileFormat('');
+    setModal({
+      message: '',
+      type: 'error',
+    });
   };
 
   return (
@@ -301,7 +317,7 @@ const ExcelFileProcessor = ({
             <NotificationForm excelData={excelData} currentFile={fileName}></NotificationForm>
           </div>
         )}
-        {wrongFileFormat && <AlertModal errorMessage={wrongFileFormat} closeAlertModal={handleFileResponse} />}
+        {modal.message && <AlertModal modal={modal} closeAlertModal={handleFileResponse} />}
       </main>
     </>
   );
