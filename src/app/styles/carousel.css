@@ -3,10 +3,6 @@ This is a custom version of the css file from "react-responsive-carousel": "^3.2
 */
 .carousel .control-arrow,
 .carousel.carousel-slider .control-arrow {
-  -webkit-transition: all 0.25s ease-in;
-  -moz-transition: all 0.25s ease-in;
-  -ms-transition: all 0.25s ease-in;
-  -o-transition: all 0.25s ease-in;
   transition: all 0.25s ease-in;
   opacity: 0.4;
   position: absolute;
@@ -60,12 +56,6 @@ This is a custom version of the css file from "react-responsive-carousel": "^3.2
   /* max-width: 100%; */
 }
 
-/* .carousel * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-} */
-
 .carousel .carousel {
   position: relative;
 }
@@ -85,11 +75,11 @@ This is a custom version of the css file from "react-responsive-carousel": "^3.2
   overflow: hidden;
 }
 .carousel.carousel-slider .control-arrow {
-  top: 32px;
+  top: 35px;
   color: #fff;
   font-size: 26px;
   border-radius: 10px;
-  bottom: 17px;
+  bottom: 19px;
   margin-top: 0;
   padding: 5px;
   background: rgba(0, 0, 0, 0.2);
@@ -101,19 +91,10 @@ This is a custom version of the css file from "react-responsive-carousel": "^3.2
   overflow: hidden;
   margin: auto;
   width: 100%;
-  -webkit-transition: height 0.15s ease-in;
-  -moz-transition: height 0.15s ease-in;
-  -ms-transition: height 0.15s ease-in;
-  -o-transition: height 0.15s ease-in;
   transition: height 0.15s ease-in;
 }
 .carousel .slider-wrapper.axis-horizontal .slider {
   -ms-box-orient: horizontal;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -moz-flex;
-  display: -webkit-flex;
   display: flex;
 }
 .carousel .slider-wrapper.axis-horizontal .slider .slide {
@@ -122,11 +103,6 @@ This is a custom version of the css file from "react-responsive-carousel": "^3.2
 }
 .carousel .slider-wrapper.axis-vertical {
   -ms-box-orient: horizontal;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -moz-flex;
-  display: -webkit-flex;
   display: flex;
 }
 .carousel .slider-wrapper.axis-vertical .slider {
@@ -141,10 +117,6 @@ This is a custom version of the css file from "react-responsive-carousel": "^3.2
   width: 100%;
 }
 .carousel .slider.animated {
-  -webkit-transition: all 0.35s ease-in-out;
-  -moz-transition: all 0.35s ease-in-out;
-  -ms-transition: all 0.35s ease-in-out;
-  -o-transition: all 0.35s ease-in-out;
   transition: all 0.35s ease-in-out;
 }
 .carousel .slide {
@@ -169,16 +141,7 @@ This is a custom version of the css file from "react-responsive-carousel": "^3.2
   width: 100%;
 }
 
-/* @media (min-width: 960px) {
-  .carousel .control-dots {
-    bottom: 0;
-  }
-} */
 .carousel .control-dots .dot {
-  -webkit-transition: opacity 0.25s ease-in;
-  -moz-transition: opacity 0.25s ease-in;
-  -ms-transition: opacity 0.25s ease-in;
-  -o-transition: opacity 0.25s ease-in;
   transition: opacity 0.25s ease-in;
   opacity: 0.3;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);

@@ -182,12 +182,12 @@ const NoteEditor = () => {
             }xl:flex-col max-w-[1500px] min-h-[calc(100vh-13rem)] justify-center text-center items-center mx-auto p-4 border border-gray-300 rounded-lg bg-slate-50 mb-32`}
           >
             {' '}
-            <div className="flex bg-slate-200 p-2 rounded-md mb-4 gap-2 justify-start flex-col items-centers w-full flex-wrap lg:justify-evenly lg:flex-row">
+            <div className="flex bg-slate-200 border-2 border-gray-400 p-2 rounded-md mb-4 gap-2 justify-start flex-col items-centers w-full flex-wrap lg:justify-evenly lg:flex-row">
               <p className="text-left flex text-gray-800 font-bold gap-2">
                 Created: <span className="font-normal">{note.createDate}</span>
               </p>
               <p className="text-left flex text-gray-800 font-bold gap-2">
-                last updated: <span className="font-normal"> {note.lastUpdated ? note.lastUpdated : '-'}</span>
+                Last updated: <span className="font-normal"> {note.lastUpdated ? note.lastUpdated : '-'}</span>
               </p>
               <p className="text-left flex text-gray-800 font-bold gap-2">
                 File name:{' '}

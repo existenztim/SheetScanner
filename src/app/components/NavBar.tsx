@@ -107,7 +107,7 @@ const Navbar = () => {
           >
             <MdOutlineAdfScanner className={pathname === `/scanner/${encodedDisplayName}` ? 'active-route' : ''} />
           </Link>
-
+          {/* lägg till modal information när man är guest, signin! */}
           <Link
             className="sheetScanner-nav-links relative sheetScanner-hover"
             href={`/notes/${encodedDisplayName}`}

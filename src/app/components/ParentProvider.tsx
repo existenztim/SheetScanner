@@ -83,9 +83,20 @@ export const AuthContextProvider: FunctionComponent<ParentProviderProps> = ({ ch
     return () => unsubscribe();
   }, []);
 
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+
+    await signInWithPopup(auth, provider)
+      .then(result => {
+        setUserValue(result.user);
+      })
+      .catch(error => {
+        if (error.code === 'auth/popup-closed-by-user') {
+          console.log('Popup closed by user without signing in');
+        } else {
+          console.error('Google Sign-In Error:', error.message);
+        }
+      });
   };
 
   const contextValue: IAppSetup = {
