@@ -17,7 +17,6 @@ const ScannerRedirect = () => {
       router.push('/scanner/guest');
     }
   }, [user, router]);
-
   return null;
 };
 

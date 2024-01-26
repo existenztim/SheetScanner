@@ -33,7 +33,7 @@ const NotesList = () => {
       };
 
       try {
-        const response = await axios.post<INote[]>(BASE_URL + API_URLS.NOTE_ROUTE, data);
+        const response = await axios.post<INote[]>(`${BASE_URL}${API_URLS.NOTE_ROUTE}`, data);
         if (response.status === 200) {
           setNoteList(response.data);
         }

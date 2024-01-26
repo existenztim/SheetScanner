@@ -1,15 +1,20 @@
 'use client';
+//Libraries
 import { ChangeEvent, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { GlobalContext } from './ParentProvider';
 import Link from 'next/link';
-import { MdKeyboardReturn, MdDelete, MdOutlineSave, MdEdit, MdLock } from 'react-icons/md';
-import { cutLongStrings, getDate, removeBlankSpace } from '../utils/stringManipulation';
-import { INote } from '../models/interfaces/INote';
-import { API_URLS } from '../models/ApiRoutes';
 import axios from 'axios';
+//Icons
+import { MdKeyboardReturn, MdDelete, MdOutlineSave, MdEdit, MdLock } from 'react-icons/md';
+//Components
+import { GlobalContext } from './ParentProvider';
 import AlertModal from './AlertModal';
+//utils
+import { cutLongStrings, getDate, removeBlankSpace } from '../utils/stringManipulation';
+//models
+import { INote } from '../models/interfaces/INote';
 import { Imodal } from '../models/interfaces/IModal';
+import { API_URLS } from '../models/ApiRoutes';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 
 interface InputValues {
@@ -40,35 +45,36 @@ const NoteEditor = () => {
     type: FormResponseTypes.ERROR,
   });
 
-  const fetchCurrentNote = async () => {
-    const data = {
-      user: user,
-      noteId: id,
-    };
-    setLoading(true);
-    try {
-      const response = await axios.post<INote>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
-      if (response.status === 200) {
-        setNote(response.data);
-        setInputValues(response.data.type);
-      }
-    } catch (error) {
-      console.log('postToDatabase', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchCurrentNote();
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        if (BASE_URL && user && id && displayName) {
+          await fetchCurrentNote();
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, [BASE_URL, user, id, displayName]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name == 'title') return setNote(prevNoteValues => ({ ...prevNoteValues, title: value }));
+
     setInputValues(prevInputValues => ({
       ...prevInputValues,
       [name]: value,
+    }));
+    return setNote(prevNote => ({
+      ...prevNote,
+      type: {
+        ...inputValues,
+        [name]: value,
+      },
     }));
   };
 
@@ -96,6 +102,29 @@ const NoteEditor = () => {
     });
   };
 
+  /**************************************************************
+                         API calls
+  **************************************************************/
+
+  const fetchCurrentNote = async () => {
+    const data = {
+      user: user,
+      noteId: id,
+    };
+    setLoading(true);
+    try {
+      const response = await axios.post<INote>(`${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
+      if (response.status === 200) {
+        setNote(response.data);
+        setInputValues(response.data.type);
+      }
+    } catch (error) {
+      handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDeleteNote = async () => {
     const config = {
       data: {
@@ -103,18 +132,13 @@ const NoteEditor = () => {
         noteId: note._id,
       },
     };
-
     setLoading(true);
-
     try {
-      const response = await axios.delete<INote[]>(
-        BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id,
-        config
-      );
+      const response = await axios.delete<INote[]>(`${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, config);
       setUserNotes(response.data);
       setRedirectAfterDelete(true);
     } catch (error) {
-      console.log('deleteToDatabase', error);
+      handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
       setConfirmDelete(false);
     } finally {
       setLoading(false);
@@ -125,13 +149,6 @@ const NoteEditor = () => {
     if (note.title.length < 3) {
       return handleModalResponse(FormResponseTexts.WRONG_INPUT, FormResponseTypes.INFORMATION);
     }
-    setNote(prevNote => ({
-      ...prevNote,
-      type: {
-        ...inputValues,
-      },
-    }));
-
     const data = {
       user: user,
       note: {
@@ -139,10 +156,9 @@ const NoteEditor = () => {
         lastUpdated: getDate(),
       },
     };
-
     setLoading(true);
     try {
-      const response = await axios.put<INote[]>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
+      const response = await axios.put<INote[]>(`${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
       setUserNotes(response.data);
       handleModalResponse(FormResponseTexts.SUCCESS_NOTE, FormResponseTypes.SUCCESS);
       fetchCurrentNote();
@@ -152,6 +168,10 @@ const NoteEditor = () => {
       setLoading(false);
     }
   };
+
+  /**************************************************************
+                         Markup
+  **************************************************************/
 
   return (
     <>

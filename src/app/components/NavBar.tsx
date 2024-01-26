@@ -60,12 +60,13 @@ const Navbar = () => {
     };
 
     try {
-      const response = await axios.post<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
+      const response = await axios.post<IUserData>(`${BASE_URL}${API_URLS.USER_ROUTE}`, data);
       if (response.status === 200) {
         localStorage.setItem('user', displayName || 'guest');
         setUserSettings(response.data.settings);
         setUserNotes(response.data.notes);
-        router.push(`/scanner/${displayName}`);
+        const redirectPath = pathname === '/' ? '/' : pathname;
+        router.push(redirectPath);
       } else if (response.status === 201) {
         localStorage.setItem('user', displayName || 'guest');
         router.push(`/scanner/${encodedDisplayName}`);
@@ -107,7 +108,6 @@ const Navbar = () => {
           >
             <MdOutlineAdfScanner className={pathname === `/scanner/${encodedDisplayName}` ? 'active-route' : ''} />
           </Link>
-          {/* lägg till modal information när man är guest, signin! */}
           <Link
             className="sheetScanner-nav-links relative sheetScanner-hover"
             href={`/notes/${encodedDisplayName}`}
