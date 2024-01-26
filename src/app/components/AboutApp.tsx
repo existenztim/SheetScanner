@@ -1,13 +1,22 @@
 'use client';
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { GlobalContext } from './ParentProvider';
+import { removeBlankSpace } from '../utils/stringManipulation';
 import { FaGithub } from 'react-icons/fa';
+
 const AboutApp = () => {
+  const { user, settings } = GlobalContext();
+  const displayName = removeBlankSpace(user?.displayName);
+  const encodedDisplayName = encodeURIComponent(displayName || 'guest');
   return (
     <>
-          <div
-        className='sheetscanner-fadein flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
+      <div
+        className={
+          settings.animations
+            ? 'sheetscanner-fadein flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
+            : 'flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
+        }
       >
         <section className="flex flex-wrap mt-6 px-2 pb-4 min-h-screen  bg-slate-100 rounded-t-xl">
           <div className="flex items-center w-full lg:w-1/2">
@@ -24,10 +33,16 @@ const AboutApp = () => {
               </p>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link className="bg-green-700 rounded" href='/scanner/guest'>
+                <Link
+                  className="sheetScanner-standard-link bg-green-700 rounded text-slate-50 sheetScanner-hover"
+                  href={`/scanner/${encodedDisplayName}`}
+                >
                   Check it out!
                 </Link>
-                <a className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded" href="#how">
+                <a
+                  className="sheetScanner-standard-link bg-yellow-600 text-gray-800 hover:text-gray-50 rounded"
+                  href="#how"
+                >
                   Tell me how it works
                 </a>
 
@@ -49,7 +64,7 @@ const AboutApp = () => {
               <Image
                 src="/images/excels.png"
                 width="616"
-                height="617"
+                height="616"
                 className={'object-cover'}
                 alt="Hero Illustration"
                 loading="eager"
@@ -72,8 +87,8 @@ const AboutApp = () => {
               <Image
                 src="/images/how.png"
                 width="616"
-                height="617"
-                className={'object-cover'}
+                height="616"
+                className="object-cover"
                 alt="Hero Illustration"
                 loading="eager"
               />
@@ -102,10 +117,16 @@ const AboutApp = () => {
               </p>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link className="bg-green-700 rounded" href='/scanner/guest'>
+                <Link
+                  className="sheetScanner-standard-link sheetScanner-hover text-slate-50 bg-green-700 rounded"
+                  href={`/scanner/${encodedDisplayName}`}
+                >
                   Check it out!
                 </Link>
-                <a href="#faq" className="bg-yellow-600 text-gray-800 hover:text-gray-50 rounded">
+                <a
+                  href="#faq"
+                  className="sheetScanner-standard-link bg-yellow-600 text-gray-800 hover:text-gray-50 rounded"
+                >
                   Common questions
                 </a>
               </div>
@@ -114,7 +135,7 @@ const AboutApp = () => {
         </section>
 
         <section id="faq" className="flex flex-wrap px-2 min-h-screen pb-4 bg-green-200">
-          <div className="flex items-center w-full lg:w-1/2">
+          <div className="flex items-center w-full mt-6 lg:w-1/2">
             <div className="max-w-2xl mb-8  w-full">
               <h2 className="text-3xl font-bold leading-snug tracking-tight text-green-900 lg:text-3xl lg:leading-tight xl:text-5xl xl:leading-tight">
                 Do you have questions about SheetScanner?
@@ -192,7 +213,10 @@ const AboutApp = () => {
               </div>
 
               <div className="flex flex-row items-center flex-wrap gap-2 justify-center">
-                <Link className="bg-green-700 rounded" href='/scanner/guest'>
+                <Link
+                  className="sheetScanner-standard-link bg-green-700 text-slate-50 rounded sheetScanner-hover"
+                  href={`/scanner/${encodedDisplayName}`}
+                >
                   Check it out!
                 </Link>
               </div>
@@ -203,8 +227,8 @@ const AboutApp = () => {
               <Image
                 src="/images/faq.png"
                 width="616"
-                height="617"
-                className={'object-cover'}
+                height="616"
+                className="object-cover"
                 alt="Hero Illustration"
                 loading="eager"
               />

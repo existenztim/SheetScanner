@@ -1,11 +1,5 @@
 'use client';
-import {
-  MdOutlineAdfScanner,
-  MdArticle,
-  MdCancel,
-  MdHomeFilled,
-  MdOutlineSettings,
-} from 'react-icons/md';
+import { MdOutlineAdfScanner, MdArticle, MdCancel, MdHomeFilled, MdOutlineSettings } from 'react-icons/md';
 import '.././styles/animations.css';
 import axios from 'axios';
 import { CgMenuGridR } from 'react-icons/cg';
@@ -39,6 +33,7 @@ const Navbar = () => {
   const { user, notes, BASE_URL, setUserSettings, setUserNotes } = GlobalContext();
 
   const displayName = removeBlankSpace(user?.displayName);
+  const encodedDisplayName = encodeURIComponent(displayName || 'guest');
 
   useEffect(() => {
     if (user && !loginHandled) {
@@ -47,7 +42,7 @@ const Navbar = () => {
     } else {
       setLoginHandled(false);
     }
-  }, [user]); 
+  }, [user]);
 
   useEffect(() => {
     const checkauth = async () => {
@@ -73,7 +68,7 @@ const Navbar = () => {
         router.push(`/scanner/${displayName}`);
       } else if (response.status === 201) {
         localStorage.setItem('user', displayName || 'guest');
-        router.push(`/scanner/${displayName}`);
+        router.push(`/scanner/${encodedDisplayName}`);
       } else {
         console.log('Could not sign in user:', response.data.user);
       }
@@ -90,13 +85,15 @@ const Navbar = () => {
     <>
       <header className="bg-green-800 text-slate-100 w-full h-14 m-0 fixed top-0 left-0 z-50 p-0 justify-center items-center flex">
         <div className="fixed left-2 bg-green-700 rounded-full border-slate-50 border-2">
-          <Image
-            className=""
-            src="/images/ssicon.png"
-            alt="The letter S representing Sheetscanner, above a spreadsheet."
-            width={35}
-            height={35}
-          />
+          <Link className="p-0 m-0" href={'/'} aria-label="Go to the home view.">
+            <Image
+              className=""
+              src="/images/ssicon.png"
+              alt="The letter S representing Sheetscanner, above a spreadsheet."
+              width={35}
+              height={35}
+            />
+          </Link>
         </div>
         <div className="flex items-center text-4xl gap-4 z-50">
           <Link className="sheetScanner-nav-links sheetScanner-hover" href={'/'} aria-label="Go to home view.">
@@ -108,12 +105,12 @@ const Navbar = () => {
             href={'/scanner'}
             aria-label="Go to the scanner view."
           >
-            <MdOutlineAdfScanner className={pathname === `/scanner/${displayName || 'guest'}` ? 'active-route' : ''} />
+            <MdOutlineAdfScanner className={pathname === `/scanner/${encodedDisplayName}` ? 'active-route' : ''} />
           </Link>
 
           <Link
             className="sheetScanner-nav-links relative sheetScanner-hover"
-            href={`/notes/${displayName}`}
+            href={`/notes/${encodedDisplayName}`}
             aria-label="View your notes."
           >
             {loading ? (
@@ -125,7 +122,7 @@ const Navbar = () => {
                 </span>
               )
             )}
-            <MdArticle className={pathname === `/notes/${displayName || 'guest'}` ? 'active-route' : ''} />
+            <MdArticle className={pathname === `/notes/${encodedDisplayName}` ? 'active-route' : ''} />
           </Link>
         </div>
         <div className="fixed right-2 z-40 text-4xl p-0 m-0 items-center flex gap-2">
@@ -136,7 +133,9 @@ const Navbar = () => {
               Welcome: <span>{user ? user.displayName : 'guest'}</span>
             </p>
           )}
-          <div className='hidden md:flex'><AuthenticationToggle/></div>
+          <div className="hidden md:flex">
+            <AuthenticationToggle />
+          </div>
           <button
             onClick={handleMenuToggle}
             aria-label="Open the settings menu"

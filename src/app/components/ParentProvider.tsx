@@ -20,7 +20,7 @@ const defaultSettings: ISettings = {
   showForm: true,
   showMatchingString: true,
   animations: true,
-  autoFill: true
+  autoFill: true,
 };
 
 //initialValues
@@ -70,7 +70,8 @@ export const AuthContextProvider: FunctionComponent<ParentProviderProps> = ({ ch
   const logout = async () => {
     signOut(auth);
     setUserSettings(defaultSettings);
-    setUserNotes([]); //alt hämta ifrån localstorage
+    setUserNotes([]);
+    handleClipboardValue('', '');
     router.push('/scanner');
   };
 

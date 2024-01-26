@@ -2,23 +2,23 @@
 .sheetscanner-hit-container-enter {
   opacity: 0;
   transform: translateY(-40px);
-  transform: scale(0.5); 
+  transform: scale(0.5);
 }
 
 .sheetscanner-hit-container-enter-active {
   opacity: 1;
-  transform: scale(1); 
-  transition: transform 0.4s ease, opacity 0.4s ease; 
+  transform: scale(1);
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
 .sheetscanner-hit-container-exit {
   opacity: 1;
-  transform: scale(1); 
+  transform: scale(1);
 }
 
 .sheetscanner-hit-container-exit-active {
   opacity: 0;
-  transform: scale(0.5) translateY(40px); 
+  transform: scale(0.5) translateY(40px);
   transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
@@ -75,13 +75,12 @@
   animation: sheetscanner-clippath 3s infinite linear;
 }
 .sheetscanner-form-response {
-  animation: sheetscanner-fadeinFromTop 0.5s ease-in-out forwards;
+  animation: sheetscanner-fadeInFromTop 0.5s ease-in-out forwards;
 }
 
 .sheetscanner-fadein {
   animation: sheetscanner-fadein 0.3s ease-in-out;
 }
-
 
 /**************************************************************/
 /*                        Keyframes */
@@ -90,11 +89,9 @@
 @keyframes sheetscanner-loader {
   0% {
     transform: rotate(0deg);
-    opacity: 0;
   }
   100% {
     transform: rotate(360deg);
-    opacity: 1;
   }
 }
 
@@ -144,6 +141,17 @@
   from {
     opacity: 0;
     transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetscanner-fadeInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;

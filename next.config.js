@@ -1,8 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: ['lh3.googleusercontent.com', 'static.vecteezy.com'], // Add more domains as needed
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'lh3.googleusercontent.com',
+          port: '',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'static.vecteezy.com',
+          port: '',
+          pathname: '/**',
+        }
+      ],
   },
+  reactStrictMode: false,
   env: {
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,

@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             className="min-h-screen mx-auto text-center pt-6 pattern-boxes pattern-green-600 pattern-bg-white 
             pattern-size-6 pattern-opacity-100 "
           >
-            <div className="sheetscanner-child-height bg-green-50 bg-opacity-90 pt-4">
+            <div className="sheetscanner-child-height bg-slate-50 bg-opacity-90 pt-4">
               <div className="mt-16">{children}</div>
             </div>
           </div>
@@ -32,4 +32,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
-

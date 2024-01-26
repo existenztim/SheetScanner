@@ -1,6 +1,11 @@
+import NoteEditor from '@/app/components/NoteEditor';
+
 const page = () => {
   return (
-  <p>Gör en noteEditor komp</p>
-  )};
+    <>
+      <NoteEditor />
+    </>
+  );
+};
 
 export default page;
