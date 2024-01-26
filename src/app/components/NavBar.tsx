@@ -60,7 +60,7 @@ const Navbar = () => {
     };
 
     try {
-      const response = await axios.post<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
+      const response = await axios.post<IUserData>(`${BASE_URL}${API_URLS.USER_ROUTE}`, data);
       if (response.status === 200) {
         localStorage.setItem('user', displayName || 'guest');
         setUserSettings(response.data.settings);
