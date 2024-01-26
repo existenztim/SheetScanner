@@ -60,7 +60,7 @@ export const AuthContextProvider: FunctionComponent<ParentProviderProps> = ({ ch
   const [clipboardValue, setClipboardValue] = useState<{ value: string; key: string }>({ value: '', key: '' });
 
   const router = useRouter();
-  const BASE_URL = API_URLS.LOCAL_BASE_ROUTE; //switch between LOCAL_BASE_ROUTE/CLOUD_BASE_ROUTE
+  const BASE_URL = API_URLS.CLOUD_BASE_ROUTE; //switch between LOCAL_BASE_ROUTE/CLOUD_BASE_ROUTE
 
   const handleClipboardValue = (value: string, key: string) => {
     setClipboardValue({ value, key });
