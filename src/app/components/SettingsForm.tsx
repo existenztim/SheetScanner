@@ -7,14 +7,19 @@ import { IUserData } from '../models/interfaces/IUser';
 import { API_URLS } from '../models/ApiRoutes';
 import AlertModal from './AlertModal';
 import AuthenticationToggle from './AuthenticationToggle';
+import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
+import { Imodal } from '../models/interfaces/IModal';
 
 interface SettingsformProps {
   handleMenuToggle: () => void;
 }
-//lägga till auto copy into form?
+
 const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
   const { user, settings, notes, BASE_URL, setUserSettings } = GlobalContext();
-  const [apiErrorResponse, setApiErrorResponse] = useState<string>('');
+  const [modal, setModal] = useState<Imodal>({
+    message: '',
+    type: FormResponseTypes.ERROR,
+  });
   const [tempSettings, setTempSettings] = useState<ISettings>({
     instances: settings.instances,
     itemsToRender: settings.itemsToRender,
@@ -48,16 +53,20 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
       try {
         const response = await axios.put<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
         setUserSettings(response.data.settings);
+        handleModalResponse(FormResponseTexts.SUCCESS_SETTINGS, FormResponseTypes.SUCCESS, false);
       } catch (error) {
-        setApiErrorResponse('An error has occured, please try again.');
+        handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR, false);
       }
     }
     setUserSettings(tempSettings);
-    handleMenuToggle();
   };
 
-  const resetAlertModal = () => {
-    setApiErrorResponse('');
+  const handleModalResponse = (message: string, type: string, closeMenu: boolean) => {
+    setModal({
+      message: message,
+      type: type,
+    });
+    if (closeMenu) return handleMenuToggle();
   };
 
   useEffect(() => {
@@ -76,10 +85,10 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
         if (response.status === 200 || response.status === 201) {
           localStorage.setItem('user', data.user?.displayName || 'guest');
         } else {
-          setApiErrorResponse('Could not sign in user, please try again.');
+          handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR, false);
         }
       } catch (error) {
-        setApiErrorResponse('An error has occured, please try again.');
+        handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR, false);
       }
     };
     getUserSettings();
@@ -186,7 +195,9 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
           </div>
         </form>
       </div>
-      {apiErrorResponse && <AlertModal errorMessage={apiErrorResponse} closeAlertModal={resetAlertModal} />}
+      {modal.message && (
+        <AlertModal modal={modal} closeAlertModal={() => handleModalResponse('', FormResponseTypes.ERROR, true)} />
+      )}
     </>
   );
 };

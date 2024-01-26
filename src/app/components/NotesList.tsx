@@ -100,7 +100,7 @@ const NotesList = () => {
           </div>
         </div>
 
-        {arrayToMap.length === 0 && (
+        {arrayToMap.length === 0 && notes.length !== 0 && (
           <p
             className={`${
               settings.animations && 'sheetscanner-start-type'
@@ -125,7 +125,12 @@ const NotesList = () => {
                       : 'mx-3 gap-2 rounded-md shadow border-2 border-gray-400 odd:bg-gray-200 even:bg-gray-300'
                   }
                 >
-                  <Link className="" href={`/notes/${displayName}/${note._id}`} aria-label="View and edit this note.">
+                  <Link
+                    className=""
+                    href={`/notes/${displayName}/${note._id}`}
+                    aria-label="View and edit this note."
+                    scroll={false}
+                  >
                     <div className="m-0 p-2 flex flex-wrap w-full justify-between px-10 text-slate-700 gap-2">
                       <div className="flex w-72">
                         <p>
@@ -141,7 +146,7 @@ const NotesList = () => {
                       </div>
                       <div className="flex w-72">
                         <p>
-                          <span className="font-bold">Last Updated: </span>
+                          <span className="font-bold">Last updated: </span>
                           {note.lastUpdated ? note.lastUpdated : '-'}
                         </p>
                       </div>

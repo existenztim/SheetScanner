@@ -2,6 +2,7 @@
 import React from 'react';
 import { GlobalContext } from './ParentProvider';
 import { handleSignIn } from '../utils/authUtils';
+import { BiLogoGmail } from 'react-icons/bi';
 
 interface SingInChoiceProps {
   setGuestToTrue: () => void;
@@ -26,24 +27,29 @@ const SignInChoice = ({ setGuestToTrue }: SingInChoiceProps) => {
           <h4 className="font-bold text-lg w-full border-b border-grey-500">Welcome!</h4>
           <p className="mt-4">
             {' '}
-            &quot;As a guest user, you can enjoy all the app features. However any notes you create will only be saved
-            locally on your device, same goes for settings. For the full experience, sign in with your Google account
-            using Gmail. It&apos;s hassle-free!&quot;
+            &quot;As a guest user, note creation is unavailable, and the settings you configure will only persist
+            temporarily throughout your session. For the complete experience, sign in with your Google account using
+            Gmail – a seamless and hassle-free process!&quot;
           </p>
         </div>
 
         <div className="mt-4 flex space-x-4 justify-end">
           <button
-            className="sheetScanner-standard-link bg-slate-200 rounded text-green-700 py-2"
+            className="sheetScanner-standard-link bg-yellow-600 text-gray-800 hover:text-gray-50 rounded"
             onClick={handleGuestLogin}
           >
             Continue as guest
           </button>
           <button
-            className=" sheetScanner-standard-link bg-green-700 rounded text-white py-2"
+            className="sheetScanner-standard-link bg-green-700 rounded text-slate-50 sheetScanner-hover flex items-center"
             onClick={initializeSignIn}
           >
-            Sign in with Gmail
+            <p className="flex items-center justify-between">
+              Sign in with Gmail{' '}
+              <span className="text-3xl">
+                <BiLogoGmail />
+              </span>
+            </p>
           </button>
         </div>
       </div>
