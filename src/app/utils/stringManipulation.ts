@@ -19,7 +19,7 @@ export const removeBlankSpace = (string: string | null | undefined): string => {
  * @returns {string} The shortened string.
  */
 
-export const cutLongStrings = (string: string | undefined, maxlength: number) => {
+export const cutLongStrings = (string: string | undefined, maxlength: number): string => {
   const shortenedString = `${string?.substring(0, maxlength)}...`;
   return shortenedString;
 };
@@ -29,7 +29,7 @@ export const cutLongStrings = (string: string | undefined, maxlength: number) =>
  * @returns {string} A string in 'YYYY-MM-DD HH:mm' format.
  */
 
-export const getDate = () => {
+export const getDate = (): string => {
   const now = new Date();
 
   const year = now.getFullYear();

@@ -93,6 +93,7 @@ const Navbar = () => {
               alt="The letter S representing Sheetscanner, above a spreadsheet."
               width={35}
               height={35}
+              priority={true}
             />
           </Link>
         </div>

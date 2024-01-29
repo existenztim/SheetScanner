@@ -9,9 +9,9 @@ import { MdKeyboardReturn, MdDelete, MdOutlineSave, MdEdit, MdLock } from 'react
 //Components
 import { GlobalContext } from './ParentProvider';
 import AlertModal from './AlertModal';
-//utils
+//Utils
 import { cutLongStrings, getDate, removeBlankSpace } from '../utils/stringManipulation';
-//models
+//Models
 import { INote } from '../models/interfaces/INote';
 import { Imodal } from '../models/interfaces/IModal';
 import { API_URLS } from '../models/ApiRoutes';
