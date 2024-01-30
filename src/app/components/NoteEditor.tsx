@@ -53,7 +53,7 @@ const NoteEditor = () => {
           await fetchCurrentNote();
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
       } finally {
         setLoading(false);
       }

@@ -75,7 +75,7 @@ const AboutApp = () => {
                 loading="eager"
               />
               <a
-                className="absolute top-2 right-28 rounded text-gray-800 text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-yellow-600 hover:text-slate-50"
+                className="absolute top-2 right-28 px-2 rounded text-gray-800 text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-yellow-600 hover:text-slate-50"
                 href="https://www.freepik.com/free-vector/mental-health-wellness-composition-workplace-icons-with-human-character-worker-with-reactions-chat-bubbles-vector-illustration_38753728.htm#query=flat%20design%20excel&position=5&from_view=search&track=ais&uuid=f991704e-4e03-4555-83d8-3788de19a847"
                 target="_blank"
                 rel="noopener noreferrer"
