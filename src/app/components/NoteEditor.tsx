@@ -270,7 +270,7 @@ const NoteEditor = () => {
           </section>
         </>
       )}
-
+      {/* Loader */}
       {loading && (
         <div className="fixed w-screen h-screen z-50 text-4xl pb-72 items-center justify-center flex flex-col gap-2">
           <span className="sheetscanner-loader w-12 h-12 rounded-full border-t-4 border-b-gray-300 border-4  border-green-600"></span>
