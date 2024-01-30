@@ -1,12 +1,14 @@
 'use client';
+//Libraries
 import { useContext, createContext, useState, useEffect, ReactNode, FunctionComponent } from 'react';
 import { signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider, User } from 'firebase/auth';
 import { auth } from '../firebase';
+import * as XLSX from 'xlsx';
+import { useRouter } from 'next/navigation';
+//Models
 import { ISettings } from '../models/interfaces/ISettings';
 import { INote } from '../models/interfaces/INote';
-import * as XLSX from 'xlsx';
 import { IAppSetup } from '../models/interfaces/IAppSetup';
-import { useRouter } from 'next/navigation';
 import { API_URLS } from '../models/ApiRoutes';
 
 interface ParentProviderProps {
@@ -92,7 +94,8 @@ export const AuthContextProvider: FunctionComponent<ParentProviderProps> = ({ ch
       })
       .catch(error => {
         if (error.code === 'auth/popup-closed-by-user') {
-          console.log('Popup closed by user without signing in');
+          //expected user behaviour
+          return;
         } else {
           console.error('Google Sign-In Error:', error.message);
         }

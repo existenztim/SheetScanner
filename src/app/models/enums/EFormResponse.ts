@@ -5,7 +5,7 @@ export enum FormResponseTexts {
   SIGNIN_FAILURE = 'Could not sign in user, please try again.',
   ERROR = 'Something went wrong, please try again.',
   ERROR_SHEET = 'The sheet you try to access could not be found.',
-  WRONG_INPUT = 'Your note must have a title with atleast 3 characters long!',
+  WRONG_INPUT = 'The note must include a title with a minimum length of 3 characters!',
   WRONG_FILE_FORMAT = 'Wrong file format uploaded!',
   WRONG_FILE_SIZE = 'File size exceeds the allowed limit (3000kb)',
 }

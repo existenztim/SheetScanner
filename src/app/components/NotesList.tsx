@@ -213,8 +213,14 @@ const NotesList = () => {
                 </CSSTransition>
               ))}
             </TransitionGroup>
-            {notes.length === 0 && (
-              <p className="flex justify-center items-center font-bold my-20 mx-0">Nothing to show.</p>
+            {!user ? (
+              <p className="flex justify-center items-center font-bold my-20 mx-0">
+                You need to sign in to use this feature.
+              </p>
+            ) : (
+              notes.length === 0 && (
+                <p className="flex justify-center items-center font-bold my-20 mx-0">Nothing to show.</p>
+              )
             )}
           </ul>
           <div className="mt-4">

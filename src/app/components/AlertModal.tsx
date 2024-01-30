@@ -34,8 +34,8 @@ const AlertModal = ({ modal, closeAlertModal }: AlertModalProps) => {
     <div
       className={
         settings.animations
-          ? 'sheetscanner-fadein flex items-center justify-center h-screen w-screen top-[-3rem] fixed z-50 bg-slate-100 bg-opacity-50 p-0 m-0'
-          : 'flex items-center justify-center h-screen w-screen top-[-3rem] fixed z-50 bg-slate-100 bg-opacity-50 p-0 m-0'
+          ? 'sheetscanner-fadein flex items-center justify-center min-h-screen w-screen top-[0px] fixed z-[49] bg-slate-100 bg-opacity-50 p-0 m-0'
+          : 'flex items-center justify-center h-screen w-screen top-[0px] fixed z-[49] bg-slate-100 bg-opacity-50 p-0 m-0'
       }
     >
       <div className="w-96 p-4 bg-white rounded-lg shadow-lg">

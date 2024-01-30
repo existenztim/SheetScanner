@@ -9,14 +9,12 @@ import '.././styles/animations.css';
 //Components
 import { GlobalContext } from './ParentProvider';
 import NotificationForm from './NotificationForm';
-import AlertModal from './AlertModal';
 //Utils
 import { cutLongStrings } from '../utils/stringManipulation';
 import { scanData } from '../utils/scanData';
 //Models
 import { FileFormat } from '../models/enums/EFileFormat';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
-import { Imodal } from '../models/interfaces/IModal';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 
 interface IExcelScannerProps {
@@ -26,6 +24,7 @@ interface IExcelScannerProps {
   setWorkSheet: Dispatch<SetStateAction<XLSX.WorkSheet | null>>;
   setExcelData: Dispatch<SetStateAction<IKeyValuePairs[]>>;
   setFilteredDataChanged: Dispatch<SetStateAction<boolean>>;
+  onModalResponse: (message: string, type: string) => void;
 }
 
 const ExcelFileProcessor = ({
@@ -34,6 +33,7 @@ const ExcelFileProcessor = ({
   setWorkSheet,
   setExcelData,
   setFilteredDataChanged,
+  onModalResponse,
   filteredDataChanged,
 }: IExcelScannerProps) => {
   const [searchTerms, setSearchTerms] = useState<string>('');
@@ -41,10 +41,6 @@ const ExcelFileProcessor = ({
   const [sheetList, setSheetList] = useState<string[]>([]);
   const [workbook, setWorkbook] = useState<XLSX.WorkBook | null>(null);
   const { settings, handleClipboardValue } = GlobalContext();
-  const [modal, setModal] = useState<Imodal>({
-    message: '',
-    type: FormResponseTypes.ERROR,
-  });
 
   const shortenedFileName = cutLongStrings(fileName, 30);
 
@@ -111,10 +107,7 @@ const ExcelFileProcessor = ({
   }, [filteredData]);
 
   const handleModalResponse = (message: string, type: string) => {
-    setModal({
-      message: message,
-      type: type,
-    });
+    onModalResponse(message, type);
   };
 
   const handleSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -312,11 +305,12 @@ const ExcelFileProcessor = ({
         </div>
         {settings.showForm && (
           <div className="flex-1 box-border p-4 m-1 border border-gray-300 rounded-lg bg-slate-50">
-            <NotificationForm excelData={excelData} currentFile={fileName}></NotificationForm>
+            <NotificationForm
+              excelData={excelData}
+              currentFile={fileName}
+              onModalResponse={handleModalResponse}
+            ></NotificationForm>
           </div>
-        )}
-        {modal.message && (
-          <AlertModal modal={modal} closeAlertModal={() => handleModalResponse('', FormResponseTypes.ERROR)} />
         )}
       </main>
     </>
