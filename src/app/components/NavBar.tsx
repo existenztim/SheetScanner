@@ -1,56 +1,73 @@
 'use client';
-import { MdOutlineAdfScanner, MdArticle, MdCancel, MdHomeFilled, MdOutlineSettings } from 'react-icons/md';
-import '.././styles/animations.css';
-import axios from 'axios';
-import { CgMenuGridR } from 'react-icons/cg';
+//Libraries
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
+import axios from 'axios';
+//Styles
+import '.././styles/animations.css';
+//Icons
+import { MdOutlineAdfScanner, MdArticle, MdCancel, MdHomeFilled, MdOutlineSettings } from 'react-icons/md';
+import { CgMenuGridR } from 'react-icons/cg';
+//Components
 import { GlobalContext } from './ParentProvider';
-import { IUserData } from '../models/interfaces/IUser';
-import { ISettings } from '../models/interfaces/ISettings';
-import { API_URLS } from '../models/ApiRoutes';
 import SettingsForm from './SettingsForm';
-import { removeBlankSpace } from '../utils/stringManipulation';
 import AuthenticationToggle from './AuthenticationToggle';
+//Utils
+import { removeBlankSpace } from '../utils/stringManipulation';
+//Models
+import { IUserData } from '../models/interfaces/IUser';
+import { API_URLS } from '../models/ApiRoutes';
+import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
+import { Imodal } from '../models/interfaces/IModal';
+import AlertModal from './AlertModal';
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [menuToggle, setMenuToogle] = useState(false);
-  const [loginHandled, setLoginHandled] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState<ISettings>({
-    instances: 3,
-    itemsToRender: 10,
-    showForm: true,
-    showMatchingString: true,
-    animations: true,
-    autoFill: true,
+  const [modal, setModal] = useState<Imodal>({
+    message: '',
+    type: FormResponseTypes.ERROR,
   });
 
-  const { user, notes, BASE_URL, setUserSettings, setUserNotes } = GlobalContext();
+  const { user, notes, BASE_URL, settings, setUserSettings, setUserNotes } = GlobalContext();
 
   const displayName = removeBlankSpace(user?.displayName);
   const encodedDisplayName = encodeURIComponent(displayName || 'guest');
 
   useEffect(() => {
-    if (user && !loginHandled) {
-      setLoginHandled(true);
-      postToDatabase();
-    } else {
-      setLoginHandled(false);
-    }
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        if (user) {
+          await postToDatabase();
+        }
+      } catch (error) {
+        handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, [user]);
 
-  useEffect(() => {
-    const checkauth = async () => {
-      await new Promise(resolve => setTimeout(resolve, 50));
-      setLoading(false);
-    };
-    checkauth();
-  }, [user]);
+  const handleMenuToggle = () => {
+    setMenuToogle(!menuToggle);
+  };
+
+  const handleModalResponse = (message: string, type: string) => {
+    setModal({
+      message: message,
+      type: type,
+    });
+  };
+
+  /**************************************************************
+                         API calls
+  **************************************************************/
 
   const postToDatabase = async () => {
     const data: IUserData = {
@@ -65,22 +82,21 @@ const Navbar = () => {
         localStorage.setItem('user', displayName || 'guest');
         setUserSettings(response.data.settings);
         setUserNotes(response.data.notes);
-        const redirectPath = pathname === '/' ? '/' : pathname;
+        const redirectPath = pathname === '/' ? '/' : pathname.replace('guest', encodedDisplayName);
         router.push(redirectPath);
-      } else if (response.status === 201) {
+      }
+      if (response.status === 201) {
         localStorage.setItem('user', displayName || 'guest');
         router.push(`/scanner/${encodedDisplayName}`);
-      } else {
-        console.log('Could not sign in user:', response.data.user);
       }
     } catch (error) {
-      console.log('postToDatabase', error);
+      handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR);
     }
   };
 
-  const handleMenuToggle = () => {
-    setMenuToogle(!menuToggle);
-  };
+  /**************************************************************
+                         Markup
+  **************************************************************/
 
   return (
     <>
@@ -162,6 +178,9 @@ const Navbar = () => {
         </div>
         {menuToggle && <SettingsForm handleMenuToggle={handleMenuToggle}></SettingsForm>}
       </header>
+      {modal.message && (
+        <AlertModal modal={modal} closeAlertModal={() => handleModalResponse('', FormResponseTypes.ERROR)} />
+      )}
     </>
   );
 };
