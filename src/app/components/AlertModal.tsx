@@ -28,6 +28,8 @@ const AlertModal = ({ modal, closeAlertModal }: AlertModalProps) => {
       text = 'Information';
       break;
     default:
+      color = 'text-red-600';
+      text = 'Error';
       break;
   }
 
