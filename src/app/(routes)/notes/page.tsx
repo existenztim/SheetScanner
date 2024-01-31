@@ -1,7 +1,5 @@
-
-
 const page = () => {
-  return <p>Denna page kan tas bort, alt så kommer den visas när man ej är inloggad</p>;
+  return <p>You need to sign in to use this feature.</p>;
 };
 
 export default page;

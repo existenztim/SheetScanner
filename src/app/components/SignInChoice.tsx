@@ -1,7 +1,9 @@
 'use client';
-import React from 'react';
-import { GlobalContext } from './ParentProvider';
+//Utils
 import { handleSignIn } from '../utils/authUtils';
+//Components
+import { GlobalContext } from './ParentProvider';
+//Logos
 import { BiLogoGmail } from 'react-icons/bi';
 
 interface SingInChoiceProps {
@@ -9,7 +11,7 @@ interface SingInChoiceProps {
 }
 
 const SignInChoice = ({ setGuestToTrue }: SingInChoiceProps) => {
-  const { user, googleSignIn } = GlobalContext();
+  const { googleSignIn } = GlobalContext();
 
   const handleGuestLogin = () => {
     localStorage.setItem('guest', 'guest');

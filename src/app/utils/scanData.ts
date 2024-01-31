@@ -1,14 +1,6 @@
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
-import { INote } from '../models/interfaces/INote';
 
-/**
- * Searches through an array of data based on given search terms.
- * @param {IKeyValuePairs[] | INote[]} data - The array of data types to search through.
- * @param {string} terms - The search terms separated by spaces.
- * @returns {IKeyValuePairs[] | INote[]} An array of matching items.
- */
-
-export const scanData = (data: IKeyValuePairs[] | INote[], terms: string) => {
+export const scanData = (data: any[], terms: string): any[] => {
   const searchTermsArray: string[] = terms
     .toLowerCase()
     .split(' ')
@@ -29,4 +21,3 @@ export const scanData = (data: IKeyValuePairs[] | INote[], terms: string) => {
     });
   });
 };
-

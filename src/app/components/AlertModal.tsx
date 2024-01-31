@@ -1,4 +1,5 @@
 import { FormResponseTypes } from '../models/enums/EFormResponse';
+import { GlobalContext } from './ParentProvider';
 
 interface AlertModalProps {
   modal: {
@@ -9,6 +10,7 @@ interface AlertModalProps {
 }
 
 const AlertModal = ({ modal, closeAlertModal }: AlertModalProps) => {
+  const { settings } = GlobalContext();
   let color = '';
   let text = '';
 
@@ -28,8 +30,19 @@ const AlertModal = ({ modal, closeAlertModal }: AlertModalProps) => {
     default:
       break;
   }
+
+  /**************************************************************
+                         Markup
+  **************************************************************/
+
   return (
-    <div className="flex items-center justify-center h-screen w-screen top-[-3rem] fixed z-40 bg-slate-100 bg-opacity-50 p-0 m-0">
+    <div
+      className={
+        settings.animations
+          ? 'sheetscanner-fadein flex items-center justify-center min-h-screen w-screen top-[0px] fixed z-[49] bg-slate-100 bg-opacity-50 p-0 m-0'
+          : 'flex items-center justify-center h-screen w-screen top-[0px] fixed z-[49] bg-slate-100 bg-opacity-50 p-0 m-0'
+      }
+    >
       <div className="w-96 p-4 bg-white rounded-lg shadow-lg">
         <div className="flex flex-col items-stretch justify-center">
           <h4 className={`font-bold text-lg w-full border-b border-grey-500 ${color}`}>{text}</h4>

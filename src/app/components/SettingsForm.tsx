@@ -1,14 +1,18 @@
 'use client';
+//Libraries
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { GlobalContext } from './ParentProvider';
-import { ISettings } from '../models/interfaces/ISettings';
 import axios from 'axios';
-import { IUserData } from '../models/interfaces/IUser';
-import { API_URLS } from '../models/ApiRoutes';
+//Components
+import { GlobalContext } from './ParentProvider';
 import AlertModal from './AlertModal';
 import AuthenticationToggle from './AuthenticationToggle';
-import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
+//Models
 import { Imodal } from '../models/interfaces/IModal';
+import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
+import { IUserData } from '../models/interfaces/IUser';
+import { API_URLS } from '../models/ApiRoutes';
+import { ISettings } from '../models/interfaces/ISettings';
+import { UserResponse } from '../api/user/route';
 
 interface SettingsformProps {
   handleMenuToggle: () => void;
@@ -29,6 +33,10 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     autoFill: settings.autoFill,
   });
 
+  useEffect(() => {
+    getUserSettings();
+  }, [user, settings]);
+
   const HandleSettings = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, checked } = e.target;
     const rangeValue = +e.target.value;
@@ -42,6 +50,40 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     });
   };
 
+  const handleModalResponse = (message: string, type: string, closeMenu: boolean) => {
+    setModal({
+      message: message,
+      type: type,
+    });
+    if (closeMenu) return handleMenuToggle();
+  };
+
+  /**************************************************************
+                         API calls
+  **************************************************************/
+
+  const getUserSettings = async () => {
+    if (!user) {
+      return null;
+    }
+    const data: IUserData = {
+      user: user,
+      settings: settings,
+      notes: [],
+    };
+
+    try {
+      const response = await axios.post<UserResponse>(BASE_URL + API_URLS.USER_ROUTE, data);
+      if (response.status === 200 || response.status === 201) {
+        localStorage.setItem('user', data.user?.displayName || 'guest');
+      } else {
+        handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR, false);
+      }
+    } catch (error) {
+      handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR, false);
+    }
+  };
+
   const handleSettingsSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data: IUserData = {
@@ -51,9 +93,11 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     };
     if (user) {
       try {
-        const response = await axios.put<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
-        setUserSettings(response.data.settings);
-        handleModalResponse(FormResponseTexts.SUCCESS_SETTINGS, FormResponseTypes.SUCCESS, false);
+        const response = await axios.put<UserResponse>(BASE_URL + API_URLS.USER_ROUTE, data);
+        if (response.status === 200 && response.data.user) {
+          setUserSettings(response.data.user.settings);
+          handleModalResponse(FormResponseTexts.SUCCESS_SETTINGS, FormResponseTypes.SUCCESS, false);
+        }
       } catch (error) {
         handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR, false);
       }
@@ -61,38 +105,9 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     setUserSettings(tempSettings);
   };
 
-  const handleModalResponse = (message: string, type: string, closeMenu: boolean) => {
-    setModal({
-      message: message,
-      type: type,
-    });
-    if (closeMenu) return handleMenuToggle();
-  };
-
-  useEffect(() => {
-    const getUserSettings = async () => {
-      if (!user) {
-        return null;
-      }
-      const data: IUserData = {
-        user: user,
-        settings: settings,
-        notes: [],
-      };
-
-      try {
-        const response = await axios.post<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
-        if (response.status === 200 || response.status === 201) {
-          localStorage.setItem('user', data.user?.displayName || 'guest');
-        } else {
-          handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR, false);
-        }
-      } catch (error) {
-        handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR, false);
-      }
-    };
-    getUserSettings();
-  }, [user, settings]);
+  /**************************************************************
+                         Markup
+ **************************************************************/
 
   return (
     <>
@@ -107,9 +122,12 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
           <p className="font-bold text-lg w-full border-b border-grey-500">
             Welcome: <span>{user ? user.displayName : 'guest'}</span>
           </p>
-          <div className="flex flex-row">
-            {user ? 'Logout:' : 'Sign in'}
-            <AuthenticationToggle />
+          <div className="flex flex-row gap-2">
+            {user ? 'Logout:' : 'Sign in:'}
+            <div className=" bg-green-600 p-0 rounded-md">
+              {' '}
+              <AuthenticationToggle />
+            </div>
           </div>
         </div>
         <form onSubmit={handleSettingsSubmit}>
@@ -142,7 +160,9 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
               <output>{tempSettings.itemsToRender}</output>
             </div>
             <div className="flex gap-2">
-              <label htmlFor="showForm">Show form:</label>
+              <label className="w-28" htmlFor="showForm">
+                Show form:
+              </label>
               <input
                 type="checkbox"
                 id="showForm"
@@ -152,7 +172,9 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
               />
             </div>
             <div className="flex gap-2">
-              <label htmlFor="autoFill">Autofill form:</label>
+              <label className="w-28" htmlFor="autoFill">
+                Autofill form:
+              </label>
               <input
                 type="checkbox"
                 id="autoFill"
@@ -161,18 +183,11 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
                 onChange={HandleSettings}
               />
             </div>
+
             <div className="flex gap-2">
-              <label htmlFor="showMatchingString">Show matching string indicator:</label>
-              <input
-                type="checkbox"
-                id="showMatchingString"
-                name="showMatchingString"
-                checked={tempSettings.showMatchingString}
-                onChange={HandleSettings}
-              />
-            </div>
-            <div className="flex gap-2">
-              <label htmlFor="animations">Animations:</label>
+              <label className="w-28" htmlFor="animations">
+                Animations:
+              </label>
               <input
                 type="checkbox"
                 id="animations"
