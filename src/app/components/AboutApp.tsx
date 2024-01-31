@@ -9,6 +9,10 @@ const AboutApp = () => {
   const { user, settings } = GlobalContext();
   const displayName = removeBlankSpace(user?.displayName);
   const encodedDisplayName = encodeURIComponent(displayName || 'guest');
+
+  /**************************************************************
+                         Markup
+  **************************************************************/
   return (
     <>
       <div
@@ -18,6 +22,7 @@ const AboutApp = () => {
             : 'flex flex-col justify-center items-center bg-slate-50 mt-[-3rem]'
         }
       >
+        {/* INTRO */}
         <section className="flex flex-wrap mt-6 px-2 pb-4 min-h-screen  bg-slate-100 rounded-t-xl">
           <div className="flex items-center w-full lg:w-1/2">
             <div className="max-w-2xl mb-8">
@@ -50,7 +55,7 @@ const AboutApp = () => {
                   href="https://github.com/existenztim/SheetScanner"
                   target="_blank"
                   rel="noopener"
-                  className="flex rounded-md items-center space-x-2 text-gray-800 hover:text-white"
+                  className="sheetScanner-standard-link flex rounded-md items-center space-x-2 text-gray-800 hover:text-white hover:bg-black"
                 >
                   <span className="flex items-center gap-2">
                     View on Github <FaGithub />
@@ -60,17 +65,17 @@ const AboutApp = () => {
             </div>
           </div>
           <div className="flex items-center justify-center w-full lg:w-1/2">
-            <div className="">
+            <div className="relative group">
               <Image
-                src="/images/excels.png"
+                src="/images/excels.webp"
                 width="616"
-                height="616"
+                height="529"
                 className={'object-cover'}
                 alt="Hero Illustration"
                 loading="eager"
               />
               <a
-                className="rounded text-gray-800 hover:text-white text-sm"
+                className="absolute top-2 right-28 px-2 rounded text-gray-800 text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-yellow-600 hover:text-slate-50"
                 href="https://www.freepik.com/free-vector/mental-health-wellness-composition-workplace-icons-with-human-character-worker-with-reactions-chat-bubbles-vector-illustration_38753728.htm#query=flat%20design%20excel&position=5&from_view=search&track=ais&uuid=f991704e-4e03-4555-83d8-3788de19a847"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -80,25 +85,25 @@ const AboutApp = () => {
             </div>
           </div>
         </section>
-
+        {/* HOW */}
         <section id="how" className="flex flex-wrap px-2 min-h-screen bg-green-100 pb-4">
           <div className="flex items-center justify-center w-full lg:w-1/2">
             <div className="relative group">
               <Image
-                src="/images/how.png"
+                src="/images/how.webp"
                 width="616"
                 height="616"
-                className="object-cover"
-                alt="Hero Illustration"
+                className={'object-cover'}
+                alt="Illustration of a laptop with an Excel document being printed"
                 loading="eager"
               />
               <a
-                className="absolute bottom-16 right-24 rounded text-gray-800 hover:text-white text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                href="https://www.freepik.com/free-vector/mental-health-wellness-composition-workplace-icons-with-human-character-worker-with-reactions-chat-bubbles-vector-illustration_38753728.htm#query=flat%20design%20excel&position=5&from_view=search&track=ais&uuid=f991704e-4e03-4555-83d8-3788de19a847"
+                className="absolute bottom-16 right-24 px-2 rounded text-gray-800 text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-yellow-600 hover:text-slate-50"
+                href="https://www.freepik.com/free-vector/spreadsheets-concept-illustration_6450136.htm#query=excel%20laptop&position=1&from_view=search&track=ais&uuid=2ac96803-a12b-42df-be43-786662b47a14"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Image by macrovector on Freepik
+                Image by storyset on Freepik
               </a>
             </div>
           </div>
@@ -133,7 +138,7 @@ const AboutApp = () => {
             </div>
           </div>
         </section>
-
+        {/* FAQ */}
         <section id="faq" className="flex flex-wrap px-2 min-h-screen pb-4 bg-green-200">
           <div className="flex items-center w-full mt-6 lg:w-1/2">
             <div className="max-w-2xl mb-8  w-full">
@@ -149,8 +154,22 @@ const AboutApp = () => {
                   <details className="w-full ">
                     <summary className="font-bold cursor-pointer">Q: How do I upload Excel documents?</summary>
                     <p className="mx-8">
-                      A: Uploading Excel documents is as simple as clicking the Upload button on our main page. You can
-                      select the file you want to work with, and SheetScanner will take care of the rest.
+                      A: Uploading Excel documents is as simple as clicking the Upload button on our scanner page. You
+                      can select the file you want to work with, and SheetScanner will take care of the rest.
+                    </p>
+                  </details>
+                </div>
+
+                <div className="flex gap-2 flex-col p-4 w-full items-start justify-start text-left shadow-md bg-slate-50">
+                  <details className="w-full">
+                    <summary className="font-bold cursor-pointer">
+                      Q: How do I prepare my Excel document for upload?
+                    </summary>
+                    <p className="mx-8">
+                      A: To ensure smooth processing, make sure your Excel document is prepared with relevant headers
+                      for your data. These headers must be placed in the first row (A1, B1, C1, and so on). There is no
+                      limit to how many headers you can have, but keep in mind that the more headers you include, the
+                      data may become harder to manage.
                     </p>
                   </details>
                 </div>
@@ -161,8 +180,8 @@ const AboutApp = () => {
                       Q: What can I search for within uploaded Excel files?
                     </summary>
                     <p className="mx-8">
-                      A: Absolutely! SheetScanners search functionality allows you to enter keywords or phrases, and it
-                      will locate them within the documents youve uploaded.
+                      A: Anything! SheetScanners search functionality allows you to enter keywords or phrases, and it
+                      will locate them within the documents you&apos;ve uploaded.
                     </p>
                   </details>
                 </div>
@@ -223,22 +242,22 @@ const AboutApp = () => {
             </div>
           </div>
           <div className="flex items-center justify-center w-full lg:w-1/2">
-            <div className="">
+            <div className="relative group">
               <Image
-                src="/images/faq.png"
+                src="/images/faq.webp"
                 width="616"
                 height="616"
-                className="object-cover"
-                alt="Hero Illustration"
+                className={'object-cover'}
+                alt="2 focused people standing next to a question mark, eager to learn more."
                 loading="eager"
               />
               <a
-                className="rounded text-gray-800 hover:text-white text-sm"
-                href="https://www.freepik.com/free-vector/mental-health-wellness-composition-workplace-icons-with-human-character-worker-with-reactions-chat-bubbles-vector-illustration_38753728.htm#query=flat%20design%20excel&position=5&from_view=search&track=ais&uuid=f991704e-4e03-4555-83d8-3788de19a847"
+                className="absolute bottom-6 left-24 px-2 rounded text-gray-800 text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100 hover:bg-yellow-600 hover:text-slate-50"
+                href="https://www.freepik.com/free-vector/flat-people-asking-questions-illustration_13379593.htm#query=flat%20design%20questions&position=16&from_view=search&track=ais&uuid=2f5f5b15-f3b0-4f94-bf8e-62956502846b"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Image by macrovector on Freepik
+                Image by Freepik
               </a>
             </div>
           </div>

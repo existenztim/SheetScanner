@@ -1,28 +1,35 @@
+//Libraries
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { GlobalContext } from './ParentProvider';
-import { IUserData } from '../models/interfaces/IUser';
-import { FormResponseTexts } from '../models/enums/EFormResponse';
 import axios from 'axios';
-import { API_URLS } from '../models/ApiRoutes';
+//Components
+import { GlobalContext } from './ParentProvider';
+//Utils
 import { getDate } from '../utils/stringManipulation';
+//Models
+import { IUserData } from '../models/interfaces/IUser';
+import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
+import { API_URLS } from '../models/ApiRoutes';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
 
 interface InputValues {
   [propertyKey: string]: string;
 }
 interface NotificationFormProps {
-  excelData: IKeyValuePairs[]; //ta bort och bara använd inputValues?
+  excelData: IKeyValuePairs[];
   currentFile: string | undefined;
+  onModalResponse: (message: string, type: string) => void;
 }
 
-const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => {
+const NotificationForm = ({ excelData, currentFile, onModalResponse }: NotificationFormProps) => {
   const [inputValues, setInputValues] = useState<InputValues>({ note: '' });
-  const [formResponse, setFormResponse] = useState<string>('');
-  const [formResponseClass, setFormResponseClass] = useState('');
   const [noteTitle, setNoteTitle] = useState('');
   const [loading, setLoading] = useState(false);
 
   const { user, notes, settings, BASE_URL, clipboardValue, setUserNotes } = GlobalContext();
+
+  useEffect(() => {
+    initialInputValues();
+  }, [excelData]);
 
   // Fills in the initial input values based on changes in excelData (used for clipboard), does not affect title/comment
   const initialInputValues = () => {
@@ -34,10 +41,6 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
     setInputValues({ ...setInitialInputValues, note: '' });
   };
 
-  useEffect(() => {
-    initialInputValues();
-  }, [excelData]);
-
   // Find what input field to autofill if its propertyKey is a match with clipboardValue.key
   useEffect(() => {
     const propertyKey = Object.keys(inputValues).find(key => key === clipboardValue.key);
@@ -48,73 +51,6 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
       }));
     }
   }, [clipboardValue]);
-
-  useEffect(() => {
-    if (formResponse) {
-      setFormResponseClass(
-        formResponse === FormResponseTexts.SUCCESS_NOTE
-          ? 'sheetscanner-form-response p-4 text-sm text-green-400 rounded-lg bg-slate-200'
-          : 'sheetscanner-form-response p-4 text-sm text-red-400 rounded-lg bg-slate-200 fade-out'
-      );
-      const timeoutId = setTimeout(() => {
-        setFormResponseClass('');
-      }, 5000);
-
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }
-  }, [formResponse]);
-
-  const handleResponseReset = () => {
-    setTimeout(() => {
-      setFormResponse('');
-    }, 5000);
-  };
-
-  const handleNotesSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!user) {
-      setFormResponse(FormResponseTexts.SIGNIN);
-      handleResponseReset();
-      return;
-    }
-
-    if (noteTitle.length < 3) {
-      setFormResponse(FormResponseTexts.WRONG_INPUT);
-      handleResponseReset();
-      return;
-    }
-
-    const data: IUserData = {
-      user: user,
-      settings: settings,
-      notes: [...notes, { type: inputValues, createDate: getDate(), fileName: currentFile ?? '', title: noteTitle }],
-    };
-
-    setLoading(true);
-
-    try {
-      const response = await axios.put<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
-
-      if (response.status === 200) {
-        setUserNotes(prevNotes => [
-          ...prevNotes,
-          { type: inputValues, createDate: getDate(), fileName: currentFile ?? '', title: noteTitle },
-        ]);
-        setNoteTitle('');
-        setFormResponse(FormResponseTexts.SUCCESS_NOTE);
-        initialInputValues();
-        handleResponseReset();
-      }
-    } catch (error) {
-      console.log(error);
-      setFormResponse(FormResponseTexts.ERROR);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -131,15 +67,68 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
 
   const resetForm = () => {
     initialInputValues();
-    setFormResponse('');
     setNoteTitle('');
   };
+
+  const handleModalResponse = (message: string, type: string) => {
+    onModalResponse(message, type);
+  };
+
+  const handleNotesSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!user) {
+      handleModalResponse(FormResponseTexts.SIGNIN, FormResponseTypes.INFORMATION);
+      return;
+    }
+    if (noteTitle.length < 3) {
+      handleModalResponse(FormResponseTexts.WRONG_INPUT, FormResponseTypes.INFORMATION);
+      return;
+    }
+
+    const data: IUserData = {
+      user: user,
+      settings: settings,
+      notes: [...notes, { type: inputValues, createDate: getDate(), fileName: currentFile ?? '', title: noteTitle }],
+    };
+
+    createNote(data);
+  };
+
+  /**************************************************************
+                         API calls
+  **************************************************************/
+
+  const createNote = async (data: IUserData) => {
+    setLoading(true);
+    try {
+      const response = await axios.put<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
+
+      if (response.status === 200) {
+        setUserNotes(prevNotes => [
+          ...prevNotes,
+          { type: inputValues, createDate: getDate(), fileName: currentFile ?? '', title: noteTitle },
+        ]);
+        setNoteTitle('');
+        handleModalResponse(FormResponseTexts.SUCCESS_NOTE, FormResponseTypes.SUCCESS);
+        initialInputValues();
+      }
+    } catch (error) {
+      handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**************************************************************
+                         Markup
+  **************************************************************/
 
   return (
     <>
       <h3 id="form" className="scroll-mb-[25rem] font-bold text-gray-800 text-lg border-b-2 border-gray-200">
         Save Notification
       </h3>
+      {/* form */}
       <form className="sheetscanner-notification-form mt-2" onSubmit={handleNotesSubmit} onReset={resetForm}>
         <div
           key={'title'}
@@ -182,7 +171,7 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
             name="note"
             id="note"
             placeholder="Is there something you would like to add? Write an optional note here!"
-            value={inputValues.note || ''} //istället för note gör unique random tal så kan man använda samma för title, för vad händer om note finns som header?
+            value={inputValues.note || ''}
             onChange={handleInputChange}
           ></textarea>
           {loading && (
@@ -190,16 +179,14 @@ const NotificationForm = ({ excelData, currentFile }: NotificationFormProps) => 
               <span className="sheetscanner-loader w-12 h-12 rounded-full border-t-4 border-b-gray-300 border-4 border-green-600"></span>
             </div>
           )}
-
-          {formResponse && formResponseClass && !loading && (
-            <div
-              className={settings.animations ? formResponseClass : 'text-sm p-4 rounded-lg bg-slate-200'}
-              role="alert"
-            >
-              <span className="font-medium">{formResponse}</span>
-            </div>
-          )}
         </div>
+        {/* Loader */}
+        {loading && (
+          <div className="fixed w-screen h-screen z-50 text-4xl pb-72 items-center justify-center flex flex-col gap-2">
+            <span className="sheetscanner-loader w-12 h-12 rounded-full border-t-4 border-b-gray-300 border-4  border-green-600"></span>
+          </div>
+        )}
+        {/* form buttons */}
         <div className="flex justify-end gap-2 mt-2">
           <button
             className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 hover:text-gray-50"

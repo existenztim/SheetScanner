@@ -1,4 +1,8 @@
 /* The following file contains custom classes with animations */
+/**************************************************************/
+/*                        Animation classes                   */
+/**************************************************************/
+
 .sheetscanner-hit-container-enter {
   opacity: 0;
   transform: translateY(-40px);

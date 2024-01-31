@@ -1,16 +1,23 @@
 'use client';
+//Libraries
 import { ChangeEvent, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { GlobalContext } from './ParentProvider';
 import Link from 'next/link';
-import { MdKeyboardReturn, MdDelete, MdOutlineSave, MdEdit, MdLock } from 'react-icons/md';
-import { cutLongStrings, getDate, removeBlankSpace } from '../utils/stringManipulation';
-import { INote } from '../models/interfaces/INote';
-import { API_URLS } from '../models/ApiRoutes';
 import axios from 'axios';
+//Icons
+import { MdKeyboardReturn, MdDelete, MdOutlineSave, MdEdit, MdLock } from 'react-icons/md';
+//Components
+import { GlobalContext } from './ParentProvider';
 import AlertModal from './AlertModal';
+//Utils
+import { cutLongStrings, getDate, removeBlankSpace } from '../utils/stringManipulation';
+//Models
+import { INote } from '../models/interfaces/INote';
 import { Imodal } from '../models/interfaces/IModal';
+import { API_URLS } from '../models/ApiRoutes';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
+import { NoteResponse } from '../api/notes/[userId]/[id]/route';
+import { NotesResponse } from '../api/notes/route';
 
 interface InputValues {
   [propertyKey: string]: string;
@@ -40,35 +47,36 @@ const NoteEditor = () => {
     type: FormResponseTypes.ERROR,
   });
 
-  const fetchCurrentNote = async () => {
-    const data = {
-      user: user,
-      noteId: id,
-    };
-    setLoading(true);
-    try {
-      const response = await axios.post<INote>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
-      if (response.status === 200) {
-        setNote(response.data);
-        setInputValues(response.data.type);
-      }
-    } catch (error) {
-      console.log('postToDatabase', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchCurrentNote();
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        if (BASE_URL && user && id && displayName) {
+          await fetchCurrentNote();
+        }
+      } catch (error) {
+        handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, [BASE_URL, user, id, displayName]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name == 'title') return setNote(prevNoteValues => ({ ...prevNoteValues, title: value }));
+
     setInputValues(prevInputValues => ({
       ...prevInputValues,
       [name]: value,
+    }));
+    return setNote(prevNote => ({
+      ...prevNote,
+      type: {
+        ...inputValues,
+        [name]: value,
+      },
     }));
   };
 
@@ -96,26 +104,24 @@ const NoteEditor = () => {
     });
   };
 
-  const handleDeleteNote = async () => {
-    const config = {
-      data: {
-        user: user,
-        noteId: note._id,
-      },
+  /**************************************************************
+                         API calls
+  **************************************************************/
+
+  const fetchCurrentNote = async () => {
+    const data = {
+      user: user,
+      noteId: id,
     };
-
     setLoading(true);
-
     try {
-      const response = await axios.delete<INote[]>(
-        BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id,
-        config
-      );
-      setUserNotes(response.data);
-      setRedirectAfterDelete(true);
+      const response = await axios.post<NoteResponse>(`${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
+      if (response.status === 200 && response.data.note) {
+        setNote(response.data.note);
+        setInputValues(response.data.note.type);
+      }
     } catch (error) {
-      console.log('deleteToDatabase', error);
-      setConfirmDelete(false);
+      handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
     } finally {
       setLoading(false);
     }
@@ -125,13 +131,6 @@ const NoteEditor = () => {
     if (note.title.length < 3) {
       return handleModalResponse(FormResponseTexts.WRONG_INPUT, FormResponseTypes.INFORMATION);
     }
-    setNote(prevNote => ({
-      ...prevNote,
-      type: {
-        ...inputValues,
-      },
-    }));
-
     const data = {
       user: user,
       note: {
@@ -139,19 +138,49 @@ const NoteEditor = () => {
         lastUpdated: getDate(),
       },
     };
-
     setLoading(true);
     try {
-      const response = await axios.put<INote[]>(BASE_URL + API_URLS.NOTE_ROUTE + '/' + displayName + '/' + id, data);
-      setUserNotes(response.data);
-      handleModalResponse(FormResponseTexts.SUCCESS_NOTE, FormResponseTypes.SUCCESS);
-      fetchCurrentNote();
+      const response = await axios.put<NotesResponse>(`${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
+      if (response.status === 200 && response.data.notes) {
+        setUserNotes(response.data.notes);
+        handleModalResponse(FormResponseTexts.SUCCESS_NOTE, FormResponseTypes.SUCCESS);
+        fetchCurrentNote();
+      }
     } catch (error) {
       handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleDeleteNote = async () => {
+    const config = {
+      data: {
+        user: user,
+        noteId: note._id,
+      },
+    };
+    setLoading(true);
+    try {
+      const response = await axios.delete<NotesResponse>(
+        `${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`,
+        config
+      );
+      if (response.status === 200 && response.data.notes) {
+        setUserNotes(response.data.notes);
+        setRedirectAfterDelete(true);
+      }
+    } catch (error) {
+      handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
+      setConfirmDelete(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**************************************************************
+                         Markup
+  **************************************************************/
 
   return (
     <>
@@ -182,12 +211,12 @@ const NoteEditor = () => {
             }xl:flex-col max-w-[1500px] min-h-[calc(100vh-13rem)] justify-center text-center items-center mx-auto p-4 border border-gray-300 rounded-lg bg-slate-50 mb-32`}
           >
             {' '}
-            <div className="flex bg-slate-200 p-2 rounded-md mb-4 gap-2 justify-start flex-col items-centers w-full flex-wrap lg:justify-evenly lg:flex-row">
+            <div className="flex bg-slate-200 border-2 border-gray-400 p-2 rounded-md mb-4 gap-2 justify-start flex-col items-centers w-full flex-wrap lg:justify-evenly lg:flex-row">
               <p className="text-left flex text-gray-800 font-bold gap-2">
                 Created: <span className="font-normal">{note.createDate}</span>
               </p>
               <p className="text-left flex text-gray-800 font-bold gap-2">
-                last updated: <span className="font-normal"> {note.lastUpdated ? note.lastUpdated : '-'}</span>
+                Last updated: <span className="font-normal"> {note.lastUpdated ? note.lastUpdated : '-'}</span>
               </p>
               <p className="text-left flex text-gray-800 font-bold gap-2">
                 File name:{' '}
@@ -250,7 +279,7 @@ const NoteEditor = () => {
           </section>
         </>
       )}
-
+      {/* Loader */}
       {loading && (
         <div className="fixed w-screen h-screen z-50 text-4xl pb-72 items-center justify-center flex flex-col gap-2">
           <span className="sheetscanner-loader w-12 h-12 rounded-full border-t-4 border-b-gray-300 border-4  border-green-600"></span>

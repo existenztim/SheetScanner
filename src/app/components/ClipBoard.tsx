@@ -7,6 +7,11 @@ const ClipBoard = () => {
   const router = usePathname();
   const { settings, clipboardValue } = GlobalContext();
   const shouldRender = router.includes('scanner'); //no need to show this component in every view
+
+  /**************************************************************
+                         Markup
+  **************************************************************/
+
   return shouldRender ? (
     <div>
       <p

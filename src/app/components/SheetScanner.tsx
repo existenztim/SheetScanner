@@ -1,12 +1,20 @@
 'use client';
-import '../styles/carousel.css';
+//Libraries
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import * as XLSX from 'xlsx';
+//Styles
+import '../styles/carousel.css';
+//Components
+import ExcelFileProcessor from './ExcelFileProcessor';
 import { GlobalContext } from './ParentProvider';
 import SignInChoice from './SignInChoice';
-import { Carousel } from 'react-responsive-carousel';
-import ExcelFileProcessor from './ExcelFileProcessor';
-import * as XLSX from 'xlsx';
+import AlertModal from './AlertModal';
+//Icons
 import { MdFormatAlignJustify, MdOutlineSearch } from 'react-icons/md';
+//Models
+import { FormResponseTypes } from '../models/enums/EFormResponse';
+import { Imodal } from '../models/interfaces/IModal';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
 
 const SheetScanner = () => {
@@ -32,8 +40,11 @@ const SheetScanner = () => {
   const [excelData3, setExcelData3] = useState<IKeyValuePairs[]>([]);
   const [excelData4, setExcelData4] = useState<IKeyValuePairs[]>([]);
   const [excelData5, setExcelData5] = useState<IKeyValuePairs[]>([]);
-
   const [filteredDataChanged, setFilteredDataChanged] = useState<boolean>(false);
+  const [modal, setModal] = useState<Imodal>({
+    message: '',
+    type: FormResponseTypes.ERROR,
+  });
 
   const setGuestToTrue = () => {
     setGuest(true);
@@ -59,6 +70,13 @@ const SheetScanner = () => {
     };
     checkauth();
   }, [user, guest]);
+
+  const handleModalResponse = (message: string, type: string) => {
+    setModal({
+      message: message,
+      type: type,
+    });
+  };
 
   const renderInstances = () => {
     const instances = [];
@@ -107,6 +125,7 @@ const SheetScanner = () => {
         <ExcelFileProcessor
           key={i}
           filteredDataChanged={filteredDataChanged}
+          onModalResponse={handleModalResponse}
           setFilteredDataChanged={setFilteredDataChanged}
           excelData={excelData}
           setExcelData={setExcelData}
@@ -143,6 +162,7 @@ const SheetScanner = () => {
               infiniteLoop={true}
               emulateTouch={false}
               swipeable={false}
+              transitionTime={settings.animations ? 300 : 0}
               ariaLabel="Your current scanning session."
             >
               {renderInstances()}
@@ -151,6 +171,9 @@ const SheetScanner = () => {
             renderInstances()
           )}
         </div>
+      )}
+      {modal.message && (
+        <AlertModal modal={modal} closeAlertModal={() => handleModalResponse('', FormResponseTypes.ERROR)} />
       )}
     </>
   );

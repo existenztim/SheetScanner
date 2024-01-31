@@ -6,6 +6,10 @@ interface CustomPaginationProps {
 }
 
 const CustomPagination = ({ currentPage, totalItems, itemsPerPage, paginate }: CustomPaginationProps) => {
+  /**************************************************************
+                         Markup
+  **************************************************************/
+
   return (
     <div>
       {totalItems > itemsPerPage &&
