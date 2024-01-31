@@ -1,4 +1,5 @@
 import connectMongoDB from '@/app/libs/mongoDB';
+import { INote } from '@/app/models/interfaces/INote';
 import MongooseUser from '@/app/models/schemas/userSchema';
 import { User } from 'firebase/auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -7,13 +8,14 @@ interface CreateUserRequestedBody {
   user: User | null;
 }
 
-/**
- * Retrieves all notes for a specific user based on the provided user data.
- * @param {NextRequest} req - The Next.js request object.
- * @returns {NextResponse} - Returns a Next.js response containing the user's notes or a message togheter with a status code.
- */
+export interface NotesResponse {
+  notes?: INote[];
+  message?: string;
+}
 
-export async function POST(req: NextRequest) {
+/****************************POST**************************/
+//Collect ALL user notes.
+export async function POST(req: NextRequest): Promise<NextResponse<NotesResponse>> {
   try {
     await connectMongoDB();
     const { user }: CreateUserRequestedBody = await req.json();
@@ -23,7 +25,7 @@ export async function POST(req: NextRequest) {
     const existingUser = await MongooseUser.findOne({ 'user.uid': user.uid });
 
     if (existingUser) {
-      return NextResponse.json(existingUser.notes, { status: 200 });
+      return NextResponse.json({ notes: existingUser.notes }, { status: 200 });
     } else {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }

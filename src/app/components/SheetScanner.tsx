@@ -1,16 +1,21 @@
 'use client';
-import '../styles/carousel.css';
+//Libraries
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import * as XLSX from 'xlsx';
+//Styles
+import '../styles/carousel.css';
+//Components
+import ExcelFileProcessor from './ExcelFileProcessor';
 import { GlobalContext } from './ParentProvider';
 import SignInChoice from './SignInChoice';
-import { Carousel } from 'react-responsive-carousel';
-import ExcelFileProcessor from './ExcelFileProcessor';
-import * as XLSX from 'xlsx';
-import { MdFormatAlignJustify, MdOutlineSearch } from 'react-icons/md';
-import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
 import AlertModal from './AlertModal';
+//Icons
+import { MdFormatAlignJustify, MdOutlineSearch } from 'react-icons/md';
+//Models
 import { FormResponseTypes } from '../models/enums/EFormResponse';
 import { Imodal } from '../models/interfaces/IModal';
+import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
 
 const SheetScanner = () => {
   const {

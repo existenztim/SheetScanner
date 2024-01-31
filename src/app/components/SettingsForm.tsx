@@ -12,6 +12,7 @@ import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormRespo
 import { IUserData } from '../models/interfaces/IUser';
 import { API_URLS } from '../models/ApiRoutes';
 import { ISettings } from '../models/interfaces/ISettings';
+import { UserResponse } from '../api/user/route';
 
 interface SettingsformProps {
   handleMenuToggle: () => void;
@@ -72,7 +73,7 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     };
 
     try {
-      const response = await axios.post<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
+      const response = await axios.post<UserResponse>(BASE_URL + API_URLS.USER_ROUTE, data);
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem('user', data.user?.displayName || 'guest');
       } else {
@@ -92,9 +93,11 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     };
     if (user) {
       try {
-        const response = await axios.put<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
-        setUserSettings(response.data.settings);
-        handleModalResponse(FormResponseTexts.SUCCESS_SETTINGS, FormResponseTypes.SUCCESS, false);
+        const response = await axios.put<UserResponse>(BASE_URL + API_URLS.USER_ROUTE, data);
+        if (response.status === 200 && response.data.user) {
+          setUserSettings(response.data.user.settings);
+          handleModalResponse(FormResponseTexts.SUCCESS_SETTINGS, FormResponseTypes.SUCCESS, false);
+        }
       } catch (error) {
         handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR, false);
       }
@@ -121,7 +124,10 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
           </p>
           <div className="flex flex-row gap-2">
             {user ? 'Logout:' : 'Sign in:'}
-            <AuthenticationToggle />
+            <div className=" bg-green-600 p-0 rounded-md">
+              {' '}
+              <AuthenticationToggle />
+            </div>
           </div>
         </div>
         <form onSubmit={handleSettingsSubmit}>

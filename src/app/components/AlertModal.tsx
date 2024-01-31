@@ -30,6 +30,11 @@ const AlertModal = ({ modal, closeAlertModal }: AlertModalProps) => {
     default:
       break;
   }
+
+  /**************************************************************
+                         Markup
+  **************************************************************/
+
   return (
     <div
       className={

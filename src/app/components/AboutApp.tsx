@@ -161,6 +161,20 @@ const AboutApp = () => {
                 </div>
 
                 <div className="flex gap-2 flex-col p-4 w-full items-start justify-start text-left shadow-md bg-slate-50">
+                  <details className="w-full">
+                    <summary className="font-bold cursor-pointer">
+                      Q: How do I prepare my Excel document for upload?
+                    </summary>
+                    <p className="mx-8">
+                      A: To ensure smooth processing, make sure your Excel document is prepared with relevant headers
+                      for your data. These headers must be placed in the first row (A1, B1, C1, and so on). There is no
+                      limit to how many headers you can have, but keep in mind that the more headers you include, the
+                      data may become harder to manage.
+                    </p>
+                  </details>
+                </div>
+
+                <div className="flex gap-2 flex-col p-4 w-full items-start justify-start text-left shadow-md bg-slate-50">
                   <details>
                     <summary className="font-bold cursor-pointer">
                       Q: What can I search for within uploaded Excel files?

@@ -16,6 +16,7 @@ import { API_URLS } from '../models/ApiRoutes';
 import { INote } from '../models/interfaces/INote';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 import { Imodal } from '../models/interfaces/IModal';
+import { NotesResponse } from '../api/notes/route';
 
 const NotesList = () => {
   const { user, notes, BASE_URL, settings } = GlobalContext();
@@ -89,9 +90,9 @@ const NotesList = () => {
     };
 
     try {
-      const response = await axios.post<INote[]>(`${BASE_URL}${API_URLS.NOTE_ROUTE}`, data);
+      const response = await axios.post<NotesResponse>(`${BASE_URL}${API_URLS.NOTE_ROUTE}`, data);
       if (response.status === 200) {
-        setNoteList(response.data);
+        setNoteList(response.data.notes || []);
       }
     } catch (error) {
       handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
@@ -117,6 +118,7 @@ const NotesList = () => {
           } mt-[-50px] min-h-[80vh] xl:flex-col max-w-[1500px] justify-center text-center items-center mx-auto px-4 pb-3`}
         >
           <h2 className="font-bold text-gray-800 text-lg p-2">My Notes</h2>
+          {/* Upper bar */}
           <div className="flex gap-4 items-end flex-wrap ml-3">
             <label htmlFor="searchInput" className="flex items-start flex-col font-bold">
               <div className="flex items-center gap-2">
@@ -158,7 +160,7 @@ const NotesList = () => {
               No matches found.
             </p>
           )}
-
+          {/* Note-list */}
           <ul className="flex flex-col gap-2 justify-center text-center mt-4">
             <TransitionGroup className="gap-2 flex flex-col">
               {currentNotes.map((note, index) => (
@@ -213,6 +215,7 @@ const NotesList = () => {
                 </CSSTransition>
               ))}
             </TransitionGroup>
+            {/* Responses */}
             {!user ? (
               <p className="flex justify-center items-center font-bold my-20 mx-0">
                 You need to sign in to use this feature.

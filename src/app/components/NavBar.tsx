@@ -22,6 +22,7 @@ import { API_URLS } from '../models/ApiRoutes';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 import { Imodal } from '../models/interfaces/IModal';
 import AlertModal from './AlertModal';
+import { UserResponse } from '../api/user/route';
 
 const Navbar = () => {
   const router = useRouter();
@@ -77,11 +78,11 @@ const Navbar = () => {
     };
 
     try {
-      const response = await axios.post<IUserData>(`${BASE_URL}${API_URLS.USER_ROUTE}`, data);
-      if (response.status === 200) {
+      const response = await axios.post<UserResponse>(`${BASE_URL}${API_URLS.USER_ROUTE}`, data);
+      if (response.status === 200 && response.data.user) {
         localStorage.setItem('user', displayName || 'guest');
-        setUserSettings(response.data.settings);
-        setUserNotes(response.data.notes);
+        setUserSettings(response.data.user.settings);
+        setUserNotes(response.data.user.notes);
         const redirectPath = pathname === '/' ? '/' : pathname.replace('guest', encodedDisplayName);
         router.push(redirectPath);
       }

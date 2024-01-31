@@ -1,10 +1,14 @@
+//Libraries
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import axios from 'axios';
+//Components
 import { GlobalContext } from './ParentProvider';
+//Utils
+import { getDate } from '../utils/stringManipulation';
+//Models
 import { IUserData } from '../models/interfaces/IUser';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
-import axios from 'axios';
 import { API_URLS } from '../models/ApiRoutes';
-import { getDate } from '../utils/stringManipulation';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
 
 interface InputValues {

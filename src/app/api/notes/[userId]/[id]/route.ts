@@ -3,6 +3,7 @@ import { INote } from '@/app/models/interfaces/INote';
 import MongooseUser from '@/app/models/schemas/userSchema';
 import { User } from 'firebase/auth';
 import { NextRequest, NextResponse } from 'next/server';
+import { NotesResponse } from '../../route';
 
 interface fetchNoteRequestedBody {
   user: User | null;
@@ -14,13 +15,14 @@ interface updateNoteRequestedBody {
   note: INote;
 }
 
-/**
- * Retrieves a specific note for the given user and note ID.
- * @param {NextRequest} req - The Next.js request object.
- * @returns {NextResponse} - Returns a Next.js response containing the requested note or a message togheter with a status code.
- */
+export interface NoteResponse {
+  note?: INote;
+  message?: string;
+}
 
-export async function POST(req: NextRequest) {
+/****************************POST**************************/
+//Collect one user note.
+export async function POST(req: NextRequest): Promise<NextResponse<NoteResponse>> {
   try {
     await connectMongoDB();
     const { user, noteId }: fetchNoteRequestedBody = await req.json();
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
     const existingUser = await MongooseUser.findOne({ 'user.uid': user.uid });
     const matchingNote = existingUser.notes.find((userNote: INote) => userNote._id == noteId);
     if (matchingNote) {
-      return NextResponse.json(matchingNote, { status: 200 });
+      return NextResponse.json({ note: matchingNote }, { status: 200 });
     } else {
       return NextResponse.json({ message: 'Note not found for the user' }, { status: 404 });
     }
@@ -40,13 +42,9 @@ export async function POST(req: NextRequest) {
   }
 }
 
-/**
- * Updates a specific note for the given user.
- * @param {NextRequest} req - The Next.js request object.
- * @returns {NextResponse} - Returns a Next.js response containing the updated note or a message togheter with a status code.
- */
-
-export async function PUT(req: NextRequest) {
+/****************************PUT**************************/
+//Updates a specific note for the given user.
+export async function PUT(req: NextRequest): Promise<NextResponse<NotesResponse>> {
   try {
     await connectMongoDB();
     const { user, note }: updateNoteRequestedBody = await req.json();
@@ -61,20 +59,16 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Note not found for the user' }, { status: 404 });
     }
     await existingUser.save();
-    return NextResponse.json(existingUser.notes, { status: 200 });
+    return NextResponse.json({ notes: existingUser.notes }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ message: 'Server Error' }, { status: 500 });
   }
 }
 
-/**
- * Deletes a specific note for the given user.
- * @param {NextRequest} req - The Next.js request object.
- * @returns {NextResponse} - Returns a Next.js response containing the remaining notes or a message togheter with a status code.
- */
-
-export async function DELETE(req: NextRequest) {
+/****************************DELETE**************************/
+//Delete a specific note for the given user.
+export async function DELETE(req: NextRequest): Promise<NextResponse<NotesResponse>> {
   try {
     await connectMongoDB();
     const { user, noteId }: fetchNoteRequestedBody = await req.json();
@@ -87,7 +81,7 @@ export async function DELETE(req: NextRequest) {
     if (noteIndex !== -1) {
       existingUser.notes.splice(noteIndex, 1);
       await existingUser.save();
-      return NextResponse.json(existingUser.notes, { status: 200 });
+      return NextResponse.json({ notes: existingUser.notes }, { status: 200 });
     } else {
       return NextResponse.json({ message: 'Note not found for the user' }, { status: 404 });
     }

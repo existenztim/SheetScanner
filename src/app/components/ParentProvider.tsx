@@ -94,7 +94,7 @@ export const AuthContextProvider: FunctionComponent<ParentProviderProps> = ({ ch
       })
       .catch(error => {
         if (error.code === 'auth/popup-closed-by-user') {
-          //expected user behaviour
+          //expected user behaviour, no need to respond
           return;
         } else {
           console.error('Google Sign-In Error:', error.message);

@@ -46,10 +46,10 @@ const ExcelFileProcessor = ({
 
   const handleFileUpload = (e: XLSX.WorkSheet) => {
     const fileUploaded = e.target;
-    const file = e.target.files[0]; //normally XLSX allows multiple files to be uploaded simultaneous, in this case we only allow one.
-    const sizeLimit = 3000 * 1024; //3000kb
+    const file = e.target.files?.[0]; // Use optional chaining to avoid errors if files array is undefined or empty
+    const sizeLimit = 3000 * 1024; // 3000kb
 
-    if (file.type !== FileFormat.CSV && file.type !== FileFormat.XLS && file.type !== FileFormat.XLSX) {
+    if (!file || (file.type !== FileFormat.CSV && file.type !== FileFormat.XLS && file.type !== FileFormat.XLSX)) {
       handleModalResponse(FormResponseTexts.WRONG_FILE_FORMAT, FormResponseTypes.INFORMATION);
       fileUploaded.value = '';
       return;
