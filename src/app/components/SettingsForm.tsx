@@ -76,6 +76,7 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
       const response = await axios.post<UserResponse>(BASE_URL + API_URLS.USER_ROUTE, data);
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem('user', data.user?.displayName || 'guest');
+        if (response.data.user) return setTempSettings(response.data.user.settings);
       } else {
         handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR, false);
       }
