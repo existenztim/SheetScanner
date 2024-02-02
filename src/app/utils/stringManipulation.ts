@@ -1,33 +1,16 @@
-/**
- * Removes any blank spaces in strings (mainly used in URLs).
- *
- * @param {string | null | undefined} string - The input string.
- * @returns {string} The string with blank spaces removed.
- */
-
 export const removeBlankSpace = (string: string | null | undefined): string => {
   const compressedString = string?.replace(/\s/g, '') || '';
   return compressedString;
 };
 
-/**
- * Cuts the end of strings that exceed the specified maxlength.
- * The last '...' is appended to inform the user that there is more to the string than is being represented.
- *
- * @param {string | undefined} string - The input string.
- * @param {number} maxlength - The maximum length of the string.
- * @returns {string} The shortened string.
- */
-
 export const cutLongStrings = (string: string | undefined, maxlength: number): string => {
-  const shortenedString = `${string?.substring(0, maxlength)}...`;
-  return shortenedString;
+  if (string && string?.length >= maxlength) {
+    const shortenedString = `${string?.substring(0, maxlength)}...`;
+    return shortenedString;
+  } else {
+    return string || '';
+  }
 };
-
-/**
- * To get the current date in 'YYYY-MM-DD HH:mm' format.
- * @returns {string} A string in 'YYYY-MM-DD HH:mm' format.
- */
 
 export const getDate = (): string => {
   const now = new Date();
