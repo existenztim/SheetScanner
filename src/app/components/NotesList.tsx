@@ -23,7 +23,7 @@ const NotesList = () => {
   const [searchTerms, setSearchTerms] = useState<string>('');
   const [noteList, setNoteList] = useState<INote[]>(notes);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState<Imodal>({
     message: '',
     type: FormResponseTypes.ERROR,
@@ -119,37 +119,44 @@ const NotesList = () => {
         >
           <h2 className="font-bold text-gray-800 text-lg p-2">My Notes</h2>
           {/* Upper bar */}
-          <div className="flex gap-4 items-end flex-wrap ml-3">
-            <label htmlFor="searchInput" className="flex items-start flex-col font-bold">
-              <div className="flex items-center gap-2">
-                <span>Find note</span>
-              </div>
-              <input
-                className="max-w-xs"
-                id="searchInput"
-                type="text"
-                placeholder="Search"
-                value={searchTerms}
-                onChange={handleSearchInput}
-              />
-            </label>
-            <button
-              className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 hover:text-gray-50"
-              onClick={handleReset}
-            >
-              Clear
-            </button>
-            <div className="mt-4 flex justify-center mx-auto lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:top-28">
-              <div className="flex justify-center">
-                <CustomPagination
-                  currentPage={currentPage}
-                  totalItems={arrayToMap.length}
-                  itemsPerPage={notesPerPage}
-                  paginate={paginate}
+          {user ? (
+            <div className="flex gap-4 items-end flex-wrap ml-3">
+              <label htmlFor="searchInput" className="flex items-start flex-col font-bold">
+                <div className="flex items-center gap-2">
+                  <span>Find note</span>
+                </div>
+                <input
+                  className="max-w-xs"
+                  id="searchInput"
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerms}
+                  onChange={handleSearchInput}
                 />
+              </label>
+              <button
+                className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 hover:text-gray-50"
+                onClick={handleReset}
+              >
+                Clear
+              </button>
+              {/* upper pagination */}
+              <div className="mt-4 flex justify-center mx-auto lg:absolute lg:left-1/2 lg:transform lg:-translate-x-1/2 lg:top-28">
+                <div className="flex justify-center">
+                  <CustomPagination
+                    currentPage={currentPage}
+                    totalItems={arrayToMap.length}
+                    itemsPerPage={notesPerPage}
+                    paginate={paginate}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <p className="flex justify-center items-center font-bold my-20 mx-0">
+              You need to sign in to use this feature.
+            </p>
+          )}
 
           {arrayToMap.length === 0 && notes.length !== 0 && (
             <p
@@ -216,16 +223,12 @@ const NotesList = () => {
               ))}
             </TransitionGroup>
             {/* Responses */}
-            {!user ? (
-              <p className="flex justify-center items-center font-bold my-20 mx-0">
-                You need to sign in to use this feature.
-              </p>
-            ) : (
-              notes.length === 0 && (
-                <p className="flex justify-center items-center font-bold my-20 mx-0">Nothing to show.</p>
-              )
+
+            {user && !loading && notes.length === 0 && (
+              <p className="flex justify-center items-center font-bold my-20 mx-0">Nothing to show.</p>
             )}
           </ul>
+          {/* lower pagination */}
           <div className="mt-4">
             <CustomPagination
               currentPage={currentPage}

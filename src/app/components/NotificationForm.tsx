@@ -10,6 +10,7 @@ import { IUserData } from '../models/interfaces/IUser';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 import { API_URLS } from '../models/ApiRoutes';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
+import { EnoteKeys } from '../models/enums/ENoteKeys';
 
 interface InputValues {
   [propertyKey: string]: string;
@@ -21,7 +22,7 @@ interface NotificationFormProps {
 }
 
 const NotificationForm = ({ excelData, currentFile, onModalResponse }: NotificationFormProps) => {
-  const [inputValues, setInputValues] = useState<InputValues>({ note: '' });
+  const [inputValues, setInputValues] = useState<InputValues>({ [EnoteKeys.Comment]: '' });
   const [noteTitle, setNoteTitle] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +55,8 @@ const NotificationForm = ({ excelData, currentFile, onModalResponse }: Notificat
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    console.log(inputValues);
+
     setInputValues(prevInputValues => ({
       ...prevInputValues,
       [name]: value,
@@ -168,10 +171,10 @@ const NotificationForm = ({ excelData, currentFile, onModalResponse }: Notificat
           <textarea
             className="shadow p-2"
             rows={8}
-            name="note"
-            id="note"
-            placeholder="Is there something you would like to add? Write an optional note here!"
-            value={inputValues.note || ''}
+            name={EnoteKeys.Comment}
+            id={EnoteKeys.Comment}
+            placeholder="Is there something you would like to add? Write an optional comment here!"
+            value={inputValues[EnoteKeys.Comment] || ''}
             onChange={handleInputChange}
           ></textarea>
           {loading && (
@@ -189,14 +192,19 @@ const NotificationForm = ({ excelData, currentFile, onModalResponse }: Notificat
         {/* form buttons */}
         <div className="flex justify-end gap-2 mt-2">
           <button
-            className="sheetScanner-standard-link bg-yellow-600 rounded text-gray-800 hover:text-gray-50"
+            className={`rounded sheetScanner-standard-link ${
+              excelData.length < 1
+                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                : 'bg-yellow-600 text-gray-800 hover:text-gray-50'
+            }`}
+            disabled={excelData.length < 1}
             type="reset"
           >
             Reset form
           </button>
           <button
             className={`rounded sheetScanner-standard-link ${
-              excelData.length < 1 ? 'bg-gray-400 text-gray-600' : 'bg-green-600 text-white'
+              excelData.length < 1 ? 'bg-gray-400 text-gray-600 cursor-not-allowed' : 'bg-green-600 text-white'
             }`}
             disabled={excelData.length < 1}
             type="submit"

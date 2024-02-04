@@ -210,8 +210,8 @@ const ExcelFileProcessor = ({
             </div>
             {/* File Info Section */}
             {fileName && workSheet && (
-              <p className="m-2 flex flex-col">
-                You are scanning data from :{' '}
+              <p className="m-2 flex flex-wrap justify-center items-center gap-2">
+                You are scanning data from:
                 <span>
                   {fileName.length > 30 ? shortenedFileName : fileName} <span className="font-bold">[sheet]</span> :
                   <select
@@ -235,19 +235,16 @@ const ExcelFileProcessor = ({
                     : 'flex justify-center items-center font-bold my-20 mx-0'
                 }
               >
-                <p>
-                  Initiate data scanning by uploading a file above. <br></br> <br></br>Still uncertain? Experience the
-                  app's capabilities with our Excel demo.
-                </p>
-                <div className="max-w-xs flex gap-4 items-start justify-start flex-wrap md:justify-center">
-                  <div className="flex items-start font-bold">
-                    <button
-                      className=" bg-green-700 px-2 rounded text-slate-50 sheetScanner-hover flex justify-center items-center"
-                      onClick={handleMockDataUpload}
-                    >
-                      Test with demo data <MdAttachFile />
-                    </button>
-                  </div>
+                <p>Initiate data scanning by uploading a file above.</p>
+                <div className="flex gap-2 flex-wrap">
+                  <p>Still uncertain? Experience the app's capabilities with our</p>
+                  <button
+                    className=" bg-green-700 px-2 rounded text-slate-50 sheetScanner-hover flex justify-center items-center"
+                    onClick={handleMockDataUpload}
+                    aria-label="Scan data from the demonstration."
+                  >
+                    Excel demo data
+                  </button>
                 </div>
               </div>
             )}
@@ -262,7 +259,7 @@ const ExcelFileProcessor = ({
                       : 'font-bold'
                   }
                 >
-                  Test data in use. Upload your own file for a real app experience.
+                  <strong>Test data in use.</strong> Upload your own file for a real app experience.
                 </p>
               )}
               {excelData.length > 0 && (
@@ -273,7 +270,7 @@ const ExcelFileProcessor = ({
                       : 'font-bold'
                   }
                 >
-                  Your sheet has a total of {excelData.length} Objects.
+                  Your sheet has a total of {excelData.length} rows.
                 </p>
               )}
               {filteredData.length > 0 && (

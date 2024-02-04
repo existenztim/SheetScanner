@@ -18,6 +18,7 @@ import { API_URLS } from '../models/ApiRoutes';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 import { NoteResponse } from '../api/notes/[userId]/[id]/route';
 import { NotesResponse } from '../api/notes/route';
+import { EnoteKeys } from '../models/enums/ENoteKeys';
 
 interface InputValues {
   [propertyKey: string]: string;
@@ -186,6 +187,7 @@ const NoteEditor = () => {
     <>
       {note._id && (
         <>
+          {/* Top Section */}
           <section
             className={`${editMode && settings.animations ? 'sheetscanner-highlighted ' : ''}${
               !editMode
@@ -204,7 +206,7 @@ const NoteEditor = () => {
               <p className="text-center">{!editMode ? 'View-mode' : 'Edit-mode'}</p>
             </div>
           </section>
-
+          {/* Main Content Section */}
           <section
             className={`${
               settings.animations && 'sheetscanner-fadein'
@@ -226,6 +228,7 @@ const NoteEditor = () => {
                 </span>
               </p>
             </div>
+            {/* Form Section */}
             <form className="sheetscanner-notification-form flex gap-2 flex-col">
               <div className={settings.animations ? 'sheetscanner-input-row flex items-center' : 'flex items-center'}>
                 <label className="text-left flex text-gray-800 font-bold mr-2 min-w-[150px]" htmlFor="title">
@@ -240,6 +243,7 @@ const NoteEditor = () => {
                   disabled={!editMode}
                 />
               </div>
+              {/* Other Inputs */}
               {Object.keys(inputValues || {}).map(propertyKey => (
                 <div
                   key={propertyKey}
@@ -250,10 +254,10 @@ const NoteEditor = () => {
                   }
                 >
                   <label className="text-left flex text-gray-800 font-bold mr-2 min-w-[150px]" htmlFor={propertyKey}>
-                    {propertyKey}:
+                    {propertyKey === EnoteKeys.Comment ? 'Comment' : propertyKey}:
                   </label>
 
-                  {propertyKey.toLowerCase() === 'note' ? (
+                  {propertyKey.toLowerCase() === EnoteKeys.Comment.toLowerCase() ? (
                     <textarea
                       className="w-full shadow text-green-600 font-bold disabled:text-gray-500 disabled:font-normal disabled:hover:cursor-not-allowed"
                       id={propertyKey}
@@ -285,7 +289,7 @@ const NoteEditor = () => {
           <span className="sheetscanner-loader w-12 h-12 rounded-full border-t-4 border-b-gray-300 border-4  border-green-600"></span>
         </div>
       )}
-
+      {/* Confirm Delete Section */}
       {confirmDelete && (
         <div className="flex items-center justify-center h-screen w-screen fixed top-14 z-40 bg-slate-100 bg-opacity-50">
           <div className="w-96 p-4 bg-white rounded-lg shadow-lg">
@@ -344,6 +348,7 @@ const NoteEditor = () => {
           </div>
         </div>
       )}
+      {/* Bottom Action Section */}
       <section className="fixed w-full bottom-0 border-y-2 border-slate-200 left-1/2 transform -translate-x-1/2 flex flex-row items-center flex-wrap gap-2 justify-center bg-slate-100 py-4">
         <button
           className={`${
@@ -387,6 +392,7 @@ const NoteEditor = () => {
           Delete <MdDelete />
         </button>
       </section>
+      {/* Alert Modal */}
       {modal.message && (
         <AlertModal modal={modal} closeAlertModal={() => handleModalResponse('', FormResponseTypes.ERROR)} />
       )}
