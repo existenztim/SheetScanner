@@ -12,6 +12,8 @@ import NotificationForm from './NotificationForm';
 //Utils
 import { cutLongStrings } from '../utils/stringManipulation';
 import { scanData } from '../utils/scanData';
+//Assets
+import MockData from '../assets/MockData.json';
 //Models
 import { FileFormat } from '../models/enums/EFileFormat';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
@@ -67,7 +69,6 @@ const ExcelFileProcessor = ({
 
   const parseAndSetExcelData = (file: File) => {
     const reader = new FileReader();
-
     reader.onload = e => {
       if (e.target !== null && e.target.result instanceof ArrayBuffer) {
         const data = e.target.result;
@@ -79,13 +80,19 @@ const ExcelFileProcessor = ({
 
         const sheet = parsedWorkbook.Sheets[defaultSheetName];
         const jsonData: IKeyValuePairs[] = XLSX.utils.sheet_to_json(sheet, { header: 0 });
-
-        setFileName(file.name);
-        setExcelData(jsonData);
+        handleExceldata(file, jsonData);
       }
     };
-
     return reader.readAsArrayBuffer(file);
+  };
+
+  const handleMockDataUpload = () => {
+    handleExceldata(new File([JSON.stringify(MockData)], 'MockData.json', { type: 'application/json' }), MockData);
+  };
+
+  const handleExceldata = (file: File, data: IKeyValuePairs[]) => {
+    setFileName(file.name);
+    setExcelData(data);
   };
 
   useEffect(() => {
@@ -98,6 +105,7 @@ const ExcelFileProcessor = ({
     return scanData(excelData, searchTerms);
   }, [excelData, searchTerms]);
 
+  //Purely related to animations
   useEffect(() => {
     setFilteredDataChanged(true);
     const timeout = setTimeout(() => {
@@ -145,38 +153,46 @@ const ExcelFileProcessor = ({
 
   return (
     <>
+      {/* Main Container */}
       <main
         className={`${
           settings.animations && 'sheetscanner-fadein'
         } flex flex-col my-0 mx-auto px-2 gap-2 mb-4 max-w-[100%] min-h-[80vh] xl:flex-row xl:max-w-[1800px]`}
       >
+        {/* Left Section: File Upload and Search */}
         <div className="flex-1 flex-wrap box-border p-4 m-1 border border-gray-300 rounded-lg bg-slate-50">
           <div className="border-b-2 border-gray-200">
-            <div className="flex gap-4 items-center justify-start flex-wrap  md:justify-center">
-              <div id="scanner" className="scroll-mt-24 flex max-w-xs">
+            <div className="flex gap-4 items-start justify-start flex-wrap md:justify-center">
+              {/* File Upload Section */}
+              <div id="scanner" className="scroll-mt-24 flex max-w-xs flex-col">
                 <label htmlFor="fileInput" className="flex items-start flex-col font-bold">
-                  <div className="flex items-center gap-2">
-                    <span>Select file</span>
+                  <span className="flex items-center gap-2">
+                    <span className="flex items-start flex-col font-bold">Upload file</span>
                     <MdAttachFile />
-                  </div>
+                  </span>
                   <input
                     className="max-w-xs"
                     id="fileInput"
+                    name="fileInput"
                     type="file"
                     accept=".xlsx, .xls, .csv"
                     onChange={handleFileUpload}
+                    aria-label="file input help"
                   />
                 </label>
+                <p className="mt-1 text-sm text-gray-500">CSV, XLSX, or XLS (MAX. 3000kb).</p>
               </div>
+              {/* Search Section */}
               <div className="flex gap-4 items-end flex-wrap">
                 <label htmlFor="searchInput" className="flex items-start flex-col font-bold">
-                  <div className="flex items-center gap-2">
+                  <span className="flex items-center gap-2">
                     <span>Scan Data</span>
                     <MdAdfScanner />
-                  </div>
+                  </span>
                   <input
-                    className="max-w-[220px]"
+                    className={`max-w-[220px] ${!fileName && 'cursor-not-allowed'}`}
                     id="searchInput"
+                    name="searchInput"
                     type="text"
                     placeholder="Search"
                     value={searchTerms}
@@ -192,13 +208,14 @@ const ExcelFileProcessor = ({
                 </button>
               </div>
             </div>
+            {/* File Info Section */}
             {fileName && workSheet && (
-              <p className="m-2 flex flex-col">
-                You are scanning data from :{' '}
+              <p className="m-2 flex flex-wrap justify-center items-center gap-2">
+                You are scanning data from:
                 <span>
                   {fileName.length > 30 ? shortenedFileName : fileName} <span className="font-bold">[sheet]</span> :
                   <select
-                    className=" bg-gray-200 rounded p-1 mx-2 border-gray-700 border-[1px]"
+                    className="bg-gray-200 border border-gray-300 text-gray-800 rounded mx-2 p-2"
                     onChange={handleChangeSheet}
                   >
                     {sheetList.map((sheet, index) => (
@@ -208,44 +225,69 @@ const ExcelFileProcessor = ({
                 </span>
               </p>
             )}
+
+            {/* No File Uploaded Message */}
             {!fileName && (
-              <p
+              <div
                 className={
                   settings.animations
-                    ? 'sheetscanner-start-upload flex justify-center items-center font-bold my-20 mx-0'
+                    ? 'sheetscanner-start-upload flex flex-col justify-center items-center font-bold my-20 mx-0'
                     : 'flex justify-center items-center font-bold my-20 mx-0'
                 }
               >
-                Upload a file.
-              </p>
+                <p>Initiate data scanning by uploading a file above.</p>
+                <div className="flex gap-2 flex-wrap">
+                  <p>Still uncertain? Experience the app's capabilities with our</p>
+                  <button
+                    className=" bg-green-700 px-2 rounded text-slate-50 sheetScanner-hover flex justify-center items-center"
+                    onClick={handleMockDataUpload}
+                    aria-label="Scan data from the demonstration."
+                  >
+                    Excel demo data
+                  </button>
+                </div>
+              </div>
             )}
 
+            {/* Various Stats and Messages */}
             <div>
+              {fileName === 'MockData.json' && (
+                <p
+                  className={
+                    settings.animations
+                      ? 'sheetscanner-stats-paragraph font-bold opacity-0 translate-x-40'
+                      : 'font-bold'
+                  }
+                >
+                  <strong>Test data in use.</strong> Upload your own file for a real app experience.
+                </p>
+              )}
+              {excelData.length > 0 && (
+                <p
+                  className={
+                    settings.animations
+                      ? 'sheetscanner-stats-paragraph font-bold opacity-0 translate-x-40'
+                      : 'font-bold'
+                  }
+                >
+                  Your sheet has a total of {excelData.length} rows.
+                </p>
+              )}
               {filteredData.length > 0 && (
-                <>
-                  <p
-                    className={
-                      settings.animations
-                        ? 'sheetscanner-stats-paragraph font-bold opacity-0 translate-x-40'
-                        : 'font-bold'
-                    }
-                  >
-                    Your sheet has a total of {excelData.length} Objects.
-                  </p>
-                  <p
-                    className={
-                      settings.animations
-                        ? 'sheetscanner-stats-paragraph font-bold opacity-0 translate-x-40'
-                        : 'font-bold'
-                    }
-                  >
-                    You found a total of {filteredData.length} matches.
-                  </p>
-                </>
+                <p
+                  className={
+                    settings.animations
+                      ? 'sheetscanner-stats-paragraph font-bold opacity-0 translate-x-40'
+                      : 'font-bold'
+                  }
+                >
+                  You found a total of {filteredData.length} matches.
+                </p>
               )}
             </div>
           </div>
 
+          {/* Transition Group for Filtered Data */}
           <TransitionGroup className="card-list flex flex-col p-1 m-2 rounded-2xl overflow-auto max-h-[80vh]">
             {filteredData.slice(0, settings.itemsToRender).map(
               (
@@ -284,6 +326,8 @@ const ExcelFileProcessor = ({
               )
             )}
           </TransitionGroup>
+
+          {/* No Matches Found Message */}
           {searchTerms && filteredData.length === 0 && (
             <p
               className={`${
@@ -293,6 +337,8 @@ const ExcelFileProcessor = ({
               No matches found.
             </p>
           )}
+
+          {/* Start Typing Message */}
           {!searchTerms && fileName && (
             <p
               className={`${
@@ -303,6 +349,8 @@ const ExcelFileProcessor = ({
             </p>
           )}
         </div>
+
+        {/* Right Section: Notification Form */}
         {settings.showForm && (
           <div className="flex-1 box-border p-4 m-1 border border-gray-300 rounded-lg bg-slate-50">
             <NotificationForm

@@ -139,7 +139,7 @@ const AboutApp = () => {
           </div>
         </section>
         {/* FAQ */}
-        <section id="faq" className="flex flex-wrap px-2 min-h-screen pb-4 bg-green-200">
+        <section id="faq" className="flex flex-wrap px-2 min-h-screen pb-4 bg-green-200 mb-12 rounded-b-lg">
           <div className="flex items-center w-full mt-6 lg:w-1/2">
             <div className="max-w-2xl mb-8  w-full">
               <h2 className="text-3xl font-bold leading-snug tracking-tight text-green-900 lg:text-3xl lg:leading-tight xl:text-5xl xl:leading-tight">
