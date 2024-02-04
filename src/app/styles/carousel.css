@@ -1,6 +1,7 @@
-/* 
-This is a custom version of the css file from "react-responsive-carousel": "^3.2.23",
-*/
+/**************************************************************************************
+                  This is a custom version of the css file from 
+                  "react-responsive-carousel": "^3.2.23" module*
+***************************************************************************************/
 .carousel .control-arrow,
 .carousel.carousel-slider .control-arrow {
   transition: all 0.25s ease-in;
