@@ -56,13 +56,11 @@ export async function PUT(req: NextRequest): Promise<NextResponse<UserResponse>>
   try {
     await connectMongoDB();
     const { user, settings, notes }: CreateUserRequestedBody = await req.json();
-    console.log('settings', settings);
     if (!user) {
       return NextResponse.json({ message: 'Invalid user data' }, { status: 400 });
     }
 
     const existingUser = await MongooseUser.findOne({ 'user.uid': user.uid });
-    console.log('user', existingUser);
     if (!existingUser) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
@@ -71,7 +69,6 @@ export async function PUT(req: NextRequest): Promise<NextResponse<UserResponse>>
     existingUser.notes = notes;
 
     await existingUser.save();
-    console.log('user after save', existingUser);
     return NextResponse.json({ user: existingUser }, { status: 200 });
   } catch (error) {
     console.error(error);

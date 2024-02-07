@@ -212,7 +212,8 @@ const AboutApp = () => {
                     <summary className="font-bold cursor-pointer">Q: Can I save my progress?</summary>
                     <p className="mx-8">
                       A: Yes, you can! SheetScanner doubles as a form-filling and note-taking tool, making it a
-                      versatile solution for various tasks.
+                      versatile solution for various tasks. Just make sure you are signed in with yout Gmail account to
+                      take advantage of it.
                     </p>
                   </details>
                 </div>
