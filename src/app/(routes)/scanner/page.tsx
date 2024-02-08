@@ -10,7 +10,6 @@ const ScannerRedirect = () => {
   const displayName = removeBlankSpace(user?.displayName);
   const encodedDisplayName = encodeURIComponent(displayName || 'guest');
   useEffect(() => {
-    console.log('you are being redirected', encodedDisplayName);
     if (user) {
       router.push(`/scanner/${encodedDisplayName}`);
     } else {

@@ -60,13 +60,8 @@ const SheetScanner = () => {
   }, []);
 
   useEffect(() => {
-    const checkauth = async () => {
-      if (user !== null) {
-        setLoading(false);
-      } else {
-        await new Promise(resolve => setTimeout(resolve, 50));
-        setLoading(false);
-      }
+    const checkauth = () => {
+      setLoading(false);
     };
     checkauth();
   }, [user, guest]);

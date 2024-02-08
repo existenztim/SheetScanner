@@ -84,7 +84,9 @@ const Navbar = () => {
         setUserSettings(response.data.user.settings);
         setUserNotes(response.data.user.notes);
         const redirectPath = pathname === '/' ? '/' : pathname.replace('guest', encodedDisplayName);
-        router.push(redirectPath);
+        if (redirectPath !== pathname) {
+          router.push(redirectPath);
+        }
       }
       if (response.status === 201) {
         localStorage.setItem('user', displayName || 'guest');

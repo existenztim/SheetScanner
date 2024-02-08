@@ -165,21 +165,24 @@ const ExcelFileProcessor = ({
             <div className="flex gap-4 items-start justify-start flex-wrap md:justify-center">
               {/* File Upload Section */}
               <div id="scanner" className="scroll-mt-24 flex max-w-xs flex-col">
-                <label htmlFor="fileInput" className="flex items-start flex-col font-bold">
-                  <span className="flex items-center gap-2">
-                    <span className="flex items-start flex-col font-bold">Upload file</span>
-                    <MdAttachFile />
-                  </span>
-                  <input
-                    className="max-w-xs"
-                    id="fileInput"
-                    name="fileInput"
-                    type="file"
-                    accept=".xlsx, .xls, .csv"
-                    onChange={handleFileUpload}
-                    aria-label="file input help"
-                  />
-                </label>
+                <label
+                  htmlFor="fileInput"
+                  className="flex items-start flex-col font-bold"
+                  onClick={e => e.preventDefault()}
+                ></label>
+                <span className="flex items-center gap-2">
+                  <span className="flex items-start flex-col font-bold">Upload file</span>
+                  <MdAttachFile />
+                </span>
+                <input
+                  className="max-w-xs"
+                  id="fileInput"
+                  name="fileInput"
+                  type="file"
+                  accept=".xlsx, .xls, .csv"
+                  onChange={handleFileUpload}
+                  aria-label="file input help"
+                />
                 <p className="mt-1 text-sm text-gray-500">CSV, XLSX, or XLS (MAX. 3000kb).</p>
               </div>
               {/* Search Section */}
@@ -236,8 +239,8 @@ const ExcelFileProcessor = ({
                 }
               >
                 <p>Initiate data scanning by uploading a file above.</p>
-                <div className="flex gap-2 flex-wrap">
-                  <p>Still uncertain? Experience the app's capabilities with our</p>
+                <div className="flex gap-2 flex-wrap justify-center">
+                  <p className="my-2">Still uncertain? Experience the app's capabilities with our</p>
                   <button
                     className=" bg-green-700 px-2 rounded text-slate-50 sheetScanner-hover flex justify-center items-center"
                     onClick={handleMockDataUpload}

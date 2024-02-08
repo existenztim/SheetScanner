@@ -70,9 +70,14 @@ export const AuthContextProvider: FunctionComponent<ParentProviderProps> = ({ ch
   };
 
   const logout = async () => {
-    signOut(auth);
+    await signOut(auth);
     setUserSettings(defaultSettings);
     setUserNotes([]);
+    setWorkSheet1(null);
+    setWorkSheet2(null);
+    setWorkSheet3(null);
+    setWorkSheet4(null);
+    setWorkSheet5(null);
     handleClipboardValue('', '');
     router.push('/scanner');
   };
