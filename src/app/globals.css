@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 199, 230, 196; /* Light green */
-  --background-end-rgb: 255, 255, 255; /* White */
+  /* --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 199, 230, 196;
+  --background-end-rgb: 255, 255, 255;  */
   scroll-behavior: smooth;
 }
 
-body {
+/* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-}
+} */
 
 .sheetScanner-standard-link {
   border: none;

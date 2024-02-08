@@ -55,7 +55,6 @@ const NotificationForm = ({ excelData, currentFile, onModalResponse }: Notificat
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    console.log(inputValues);
 
     setInputValues(prevInputValues => ({
       ...prevInputValues,

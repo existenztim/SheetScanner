@@ -7,8 +7,21 @@ import ClipBoard from './components/ClipBoard';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sheet-scanner.vercel.app/'),
   title: 'SheetScanner',
-  description: 'Scan your spread sheets with ease!',
+  description: 'Scan your spreadsheets with ease!',
+  authors: [{ name: "Tim Sundell" }],
+  keywords: 'spreadsheet, scanner, Next.js, React, JavaScript, Tailwind, Excel',
+  openGraph: { 
+    type: 'website',
+    url: 'https://sheet-scanner.vercel.app/', 
+    title: 'SheetScanner - Scan your spreadsheets with ease!',
+    description: 'SheetScanner is a handy tool for scanning spreadsheets with ease. Try it now!',
+    images: {
+      url: '/images/excels.webp',
+      alt: 'Excel sheet being analyzed',
+    },
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

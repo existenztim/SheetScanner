@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## SheetScanner - Scan your spread sheets with ease!
 
-## Getting Started
+SheetScanner is my exam project at Medieinstitutet FED22. It's a powerful and versatile web application designed to simplify the way you work with Excel documents. With SheetScanner, you can effortlessly search through your uploaded Excel files, making data retrieval a breeze with advanced search functionallity and note creation.
 
-First, run the development server:
+## Codestack :
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Setup 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Before you start, ensure you have the following installed:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Node.js 
+npm/yarn
+Firebase account (for authentication) 
+MongoDB account (for database connection)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Getting Started 
 
-## Learn More
+Clone the repository:
 
-To learn more about Next.js, take a look at the following resources:
+1. Get the files: run "git clone https://github.com/existenztim/SheetScanner.git" 
+2. Get dependencies: run "npm i".
+3. Get authentication: Create a firebase account and obtain the google configuration details.
+4. Get db connection: Create an account at https://www.mongodb.com and create a new cluster, obtain the details. If you intend to use a local db, use MongoDB compass.
+5. Setup .env variables: Create a .env file in the root of the project with the following variables below:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- MONGODB_URI = "mongodb+srv://[your name]:[your cluster name].mongodb.net/[your db name here]"
+- MONGODB_URI_LOCAL = "mongodb://localhost:27017/sheetscanner" (or your preferred port)
+- FIREBASE_API_KEY='[your api key]'
+- FIREBASE_AUTH_DOMAIN='[your auth domain]'
+- FIREBASE_PROJECT_ID='[your project id]'
+- FIREBASE_STORAGE_BUCKET='[your storage bucket]'
+- FIREBASE_MESSAGING_SENDER_ID='[your messaging sender id]'
+- FIREBASE_APP_ID='[your app id]'
+- LOCAL_BASE_ROUTE='http://localhost:3000/api' (or your preferred port)
+- CLOUD_BASE_ROUTE='https://sheet-scanner.vercel.app/api' (or your preferred host)
+- USER_ROUTE='/[your preferred route user route]'
+- NOTE_ROUTE='/[your preferred note route]'
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+6. Get the project up and running locally: run "npm run dev".
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- npm run dev: Start the development server. 
+- npm run build: Build the production-ready application. 
+- npm start: Start the production server. 
+- npm run lint: Run linting using Next.js lint. 
+- npm test: Run Jest tests. 
+- npm run test:watch: Run Jest tests in watch mode.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Images
+
+![Demo Image](demo/demo1.png)
+![Demo Image](demo/demo2.png)
+![Demo Image](demo/demo3.png)
+![Demo Image](demo/demo4.png)
+
+## Authors
+
+- [@existenztim](https://github.com/existenztim)
+
