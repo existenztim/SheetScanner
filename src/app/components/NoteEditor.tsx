@@ -13,12 +13,13 @@ import AlertModal from './AlertModal';
 import { cutLongStrings, getDate, removeBlankSpace } from '../utils/stringManipulation';
 //Models
 import { INote } from '../models/interfaces/INote';
-import { Imodal } from '../models/interfaces/IModal';
 import { API_URLS } from '../models/ApiRoutes';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 import { NoteResponse } from '../api/notes/[userId]/[id]/route';
 import { NotesResponse } from '../api/notes/route';
 import { EnoteKeys } from '../models/enums/ENoteKeys';
+//Hooks
+import useModal from '../hooks/useModal';
 
 interface InputValues {
   [propertyKey: string]: string;
@@ -43,10 +44,7 @@ const NoteEditor = () => {
   const [loading, setLoading] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [redirectAfterDelete, setRedirectAfterDelete] = useState(false);
-  const [modal, setModal] = useState<Imodal>({
-    message: '',
-    type: FormResponseTypes.ERROR,
-  });
+  const { modal, handleModalResponse } = useModal();
 
   useEffect(() => {
     const loadData = async () => {
@@ -96,13 +94,6 @@ const NoteEditor = () => {
 
   const cancelDeleteNote = () => {
     setConfirmDelete(false);
-  };
-
-  const handleModalResponse = (message: string, type: string) => {
-    setModal({
-      message: message,
-      type: type,
-    });
   };
 
   /**************************************************************

@@ -17,6 +17,6 @@ const mockProps = {
 describe('ExcelFileProcessor component', () => {
   test('renders without crashing', () => {
     render(<ExcelFileProcessor {...mockProps} />);
-    expect(screen.getByLabelText('Select file')).toBeInTheDocument();
+    expect(screen.getByText('Upload file')).toBeInTheDocument();
   });
 });
