@@ -10,6 +10,8 @@ import { ISettings } from '../models/interfaces/ISettings';
 import { INote } from '../models/interfaces/INote';
 import { IAppSetup } from '../models/interfaces/IAppSetup';
 import { API_URLS } from '../models/ApiRoutes';
+//Hooks
+import useClipboard from '../hooks/useClipBoard';
 
 interface ParentProviderProps {
   children: ReactNode;
@@ -53,21 +55,15 @@ export const AuthContextProvider: FunctionComponent<ParentProviderProps> = ({ ch
   const [userValue, setUserValue] = useState<User | null>(defaultUser);
   const [userSettings, setUserSettings] = useState<ISettings>(defaultSettings);
   const [userNotes, setUserNotes] = useState<INote[]>([]);
-
   const [workSheet1, setWorkSheet1] = useState<XLSX.WorkSheet | null>(null);
   const [workSheet2, setWorkSheet2] = useState<XLSX.WorkSheet | null>(null);
   const [workSheet3, setWorkSheet3] = useState<XLSX.WorkSheet | null>(null);
   const [workSheet4, setWorkSheet4] = useState<XLSX.WorkSheet | null>(null);
   const [workSheet5, setWorkSheet5] = useState<XLSX.WorkSheet | null>(null);
-  const [clipboardValue, setClipboardValue] = useState<{ value: string; key: string }>({ value: '', key: '' });
+  const { clipboardValue, handleClipboardValue } = useClipboard();
 
   const router = useRouter();
   const BASE_URL = API_URLS.LOCAL_BASE_ROUTE; //switch between LOCAL_BASE_ROUTE/CLOUD_BASE_ROUTE
-
-  const handleClipboardValue = (value: string, key: string) => {
-    setClipboardValue({ value, key });
-    navigator.clipboard.writeText(value);
-  };
 
   const logout = async () => {
     await signOut(auth);
