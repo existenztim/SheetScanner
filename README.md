@@ -48,6 +48,10 @@ Clone the repository:
 - npm test: Run Jest tests. 
 - npm run test:watch: Run Jest tests in watch mode.
 
+## Lighthouse repport
+
+![Demo Image](demo/ligthouse.png)
+
 ## Images
 
 ![Demo Image](demo/demo1.png)
