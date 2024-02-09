@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import axios from 'axios';
 //Styles
 import '.././styles/animations.css';
 //Icons
@@ -24,6 +23,7 @@ import AlertModal from './AlertModal';
 import { UserResponse } from '../api/user/route';
 //Hooks
 import useModal from '../hooks/useModal';
+import { post } from '../services/apiService';
 
 const Navbar = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ const Navbar = () => {
   const [loading, setLoading] = useState(true);
   const { modal, handleModalResponse } = useModal();
 
-  const { user, notes, BASE_URL, settings, setUserSettings, setUserNotes } = GlobalContext();
+  const { user, notes, settings, setUserSettings, setUserNotes } = GlobalContext();
 
   const displayName = removeBlankSpace(user?.displayName);
   const encodedDisplayName = encodeURIComponent(displayName || 'guest');
@@ -69,19 +69,15 @@ const Navbar = () => {
     };
 
     try {
-      const response = await axios.post<UserResponse>(`${BASE_URL}${API_URLS.USER_ROUTE}`, data);
-      if (response.status === 200 && response.data.user) {
+      const response = await post<UserResponse>(API_URLS.USER_ROUTE, data);
+      if (response.user) {
         localStorage.setItem('user', displayName || 'guest');
-        setUserSettings(response.data.user.settings);
-        setUserNotes(response.data.user.notes);
+        setUserSettings(response.user.settings);
+        setUserNotes(response.user.notes);
         const redirectPath = pathname === '/' ? '/' : pathname.replace('guest', encodedDisplayName);
         if (redirectPath !== pathname) {
           router.push(redirectPath);
         }
-      }
-      if (response.status === 201) {
-        localStorage.setItem('user', displayName || 'guest');
-        router.push(`/scanner/${encodedDisplayName}`);
       }
     } catch (error) {
       handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR);

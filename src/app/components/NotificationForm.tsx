@@ -1,6 +1,5 @@
 //Libraries
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import axios from 'axios';
 //Components
 import { GlobalContext } from './ParentProvider';
 //Utils
@@ -11,6 +10,9 @@ import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormRespo
 import { API_URLS } from '../models/ApiRoutes';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
 import { EnoteKeys } from '../models/enums/ENoteKeys';
+import { UserResponse } from '../api/user/route';
+//Services
+import { put } from '../services/apiService';
 
 interface InputValues {
   [propertyKey: string]: string;
@@ -26,7 +28,7 @@ const NotificationForm = ({ excelData, currentFile, onModalResponse }: Notificat
   const [noteTitle, setNoteTitle] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { user, notes, settings, BASE_URL, clipboardValue, setUserNotes } = GlobalContext();
+  const { user, notes, settings, clipboardValue, setUserNotes } = GlobalContext();
 
   useEffect(() => {
     initialInputValues();
@@ -103,9 +105,8 @@ const NotificationForm = ({ excelData, currentFile, onModalResponse }: Notificat
   const createNote = async (data: IUserData) => {
     setLoading(true);
     try {
-      const response = await axios.put<IUserData>(BASE_URL + API_URLS.USER_ROUTE, data);
-
-      if (response.status === 200) {
+      const response = await put<UserResponse>(API_URLS.USER_ROUTE, data);
+      if (response.user) {
         setUserNotes(prevNotes => [
           ...prevNotes,
           { type: inputValues, createDate: getDate(), fileName: currentFile ?? '', title: noteTitle },
