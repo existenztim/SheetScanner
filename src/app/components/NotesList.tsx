@@ -17,6 +17,8 @@ import { INote } from '../models/interfaces/INote';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
 import { Imodal } from '../models/interfaces/IModal';
 import { NotesResponse } from '../api/notes/route';
+//Hooks
+import useModal from '../hooks/useModal';
 
 const NotesList = () => {
   const { user, notes, BASE_URL, settings } = GlobalContext();
@@ -24,10 +26,7 @@ const NotesList = () => {
   const [noteList, setNoteList] = useState<INote[]>(notes);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [modal, setModal] = useState<Imodal>({
-    message: '',
-    type: FormResponseTypes.ERROR,
-  });
+  const { modal, handleModalResponse } = useModal();
 
   const notesPerPage = 10;
 
@@ -71,13 +70,6 @@ const NotesList = () => {
   const handleReset = () => {
     setSearchTerms('');
     setCurrentPage(1);
-  };
-
-  const handleModalResponse = (message: string, type: string) => {
-    setModal({
-      message: message,
-      type: type,
-    });
   };
 
   /**************************************************************
