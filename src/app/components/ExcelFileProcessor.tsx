@@ -68,21 +68,27 @@ const ExcelFileProcessor = ({
   };
 
   const parseAndSetExcelData = (file: File) => {
+    // Create a new FileReader instance
     const reader = new FileReader();
+    // Define onload event handler for when file reading is complete
     reader.onload = e => {
+      // Ensure the target exists and the result is an ArrayBuffer
       if (e.target !== null && e.target.result instanceof ArrayBuffer) {
+        // Get the data from the FileReader result
         const data = e.target.result;
+        // Parse the workbook from the ArrayBuffer data
         const parsedWorkbook = XLSX.read(data, { type: 'array' });
         setWorkbook(parsedWorkbook);
-
+        // Get the default sheet name and set the sheet list
         const defaultSheetName = parsedWorkbook.SheetNames[0];
         setSheetList(parsedWorkbook.SheetNames);
-
+        // Get the data from the default sheet as JSON
         const sheet = parsedWorkbook.Sheets[defaultSheetName];
         const jsonData: IKeyValuePairs[] = XLSX.utils.sheet_to_json(sheet, { header: 0 });
         handleExceldata(file, jsonData);
       }
     };
+    // Read the file as an ArrayBuffer
     return reader.readAsArrayBuffer(file);
   };
 
