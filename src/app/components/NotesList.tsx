@@ -4,7 +4,6 @@ import { ChangeEvent, useMemo, useState, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { GlobalContext } from './ParentProvider';
 import Link from 'next/link';
-import axios from 'axios';
 //Components
 import AlertModal from './AlertModal';
 import CustomPagination from './CustomPagination';
@@ -15,10 +14,11 @@ import { cutLongStrings, removeBlankSpace } from '../utils/stringManipulation';
 import { API_URLS } from '../models/ApiRoutes';
 import { INote } from '../models/interfaces/INote';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
-import { Imodal } from '../models/interfaces/IModal';
 import { NotesResponse } from '../api/notes/route';
 //Hooks
 import useModal from '../hooks/useModal';
+//Services
+import { post } from '../services/apiService';
 
 const NotesList = () => {
   const { user, notes, BASE_URL, settings } = GlobalContext();
@@ -82,10 +82,8 @@ const NotesList = () => {
     };
 
     try {
-      const response = await axios.post<NotesResponse>(`${BASE_URL}${API_URLS.NOTE_ROUTE}`, data);
-      if (response.status === 200) {
-        setNoteList(response.data.notes || []);
-      }
+      const response = await post<NotesResponse>(API_URLS.NOTE_ROUTE, data);
+      setNoteList(response.notes ? response.notes : []);
     } catch (error) {
       handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
     }
