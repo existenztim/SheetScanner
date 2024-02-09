@@ -20,19 +20,17 @@ import { removeBlankSpace } from '../utils/stringManipulation';
 import { IUserData } from '../models/interfaces/IUser';
 import { API_URLS } from '../models/ApiRoutes';
 import { FormResponseTexts, FormResponseTypes } from '../models/enums/EFormResponse';
-import { Imodal } from '../models/interfaces/IModal';
 import AlertModal from './AlertModal';
 import { UserResponse } from '../api/user/route';
+//Hooks
+import useModal from '../hooks/useModal';
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [menuToggle, setMenuToogle] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [modal, setModal] = useState<Imodal>({
-    message: '',
-    type: FormResponseTypes.ERROR,
-  });
+  const { modal, handleModalResponse } = useModal();
 
   const { user, notes, BASE_URL, settings, setUserSettings, setUserNotes } = GlobalContext();
 
@@ -57,13 +55,6 @@ const Navbar = () => {
 
   const handleMenuToggle = () => {
     setMenuToogle(!menuToggle);
-  };
-
-  const handleModalResponse = (message: string, type: string) => {
-    setModal({
-      message: message,
-      type: type,
-    });
   };
 
   /**************************************************************

@@ -14,8 +14,9 @@ import AlertModal from './AlertModal';
 import { MdFormatAlignJustify, MdOutlineSearch } from 'react-icons/md';
 //Models
 import { FormResponseTypes } from '../models/enums/EFormResponse';
-import { Imodal } from '../models/interfaces/IModal';
 import { IKeyValuePairs } from '../models/interfaces/IKeyValuePairs';
+//Hooks
+import useModal from '../hooks/useModal';
 
 const SheetScanner = () => {
   const {
@@ -41,10 +42,7 @@ const SheetScanner = () => {
   const [excelData4, setExcelData4] = useState<IKeyValuePairs[]>([]);
   const [excelData5, setExcelData5] = useState<IKeyValuePairs[]>([]);
   const [filteredDataChanged, setFilteredDataChanged] = useState<boolean>(false);
-  const [modal, setModal] = useState<Imodal>({
-    message: '',
-    type: FormResponseTypes.ERROR,
-  });
+  const { modal, handleModalResponse } = useModal();
 
   const setGuestToTrue = () => {
     setGuest(true);
@@ -65,13 +63,6 @@ const SheetScanner = () => {
     };
     checkauth();
   }, [user, guest]);
-
-  const handleModalResponse = (message: string, type: string) => {
-    setModal({
-      message: message,
-      type: type,
-    });
-  };
 
   const renderInstances = () => {
     const instances = [];
