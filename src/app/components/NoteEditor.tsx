@@ -3,7 +3,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import axios from 'axios';
 //Icons
 import { MdKeyboardReturn, MdDelete, MdOutlineSave, MdEdit, MdLock } from 'react-icons/md';
 //Components
@@ -20,6 +19,8 @@ import { NotesResponse } from '../api/notes/route';
 import { EnoteKeys } from '../models/enums/ENoteKeys';
 //Hooks
 import useModal from '../hooks/useModal';
+//Services
+import { del, post, put } from '../services/apiService';
 
 interface InputValues {
   [propertyKey: string]: string;
@@ -107,10 +108,10 @@ const NoteEditor = () => {
     };
     setLoading(true);
     try {
-      const response = await axios.post<NoteResponse>(`${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
-      if (response.status === 200 && response.data.note) {
-        setNote(response.data.note);
-        setInputValues(response.data.note.type);
+      const response = await post<NoteResponse>(`${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
+      if (response.note) {
+        setNote(response.note);
+        setInputValues(response.note.type);
       }
     } catch (error) {
       handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR);
@@ -132,9 +133,9 @@ const NoteEditor = () => {
     };
     setLoading(true);
     try {
-      const response = await axios.put<NotesResponse>(`${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
-      if (response.status === 200 && response.data.notes) {
-        setUserNotes(response.data.notes);
+      const response = await put<NotesResponse>(`${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
+      if (response.notes) {
+        setUserNotes(response.notes);
         handleModalResponse(FormResponseTexts.SUCCESS_NOTE, FormResponseTypes.SUCCESS);
         fetchCurrentNote();
       }
@@ -146,20 +147,16 @@ const NoteEditor = () => {
   };
 
   const handleDeleteNote = async () => {
-    const config = {
-      data: {
-        user: user,
-        noteId: note._id,
-      },
+    const data = {
+      user: user,
+      noteId: note._id,
     };
+
     setLoading(true);
     try {
-      const response = await axios.delete<NotesResponse>(
-        `${BASE_URL}${API_URLS.NOTE_ROUTE}/${displayName}/${id}`,
-        config
-      );
-      if (response.status === 200 && response.data.notes) {
-        setUserNotes(response.data.notes);
+      const response = await del<NotesResponse>(`${API_URLS.NOTE_ROUTE}/${displayName}/${id}`, data);
+      if (response.notes) {
+        setUserNotes(response.notes);
         setRedirectAfterDelete(true);
       }
     } catch (error) {

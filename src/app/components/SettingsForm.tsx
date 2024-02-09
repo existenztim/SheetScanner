@@ -1,7 +1,6 @@
 'use client';
 //Libraries
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import axios from 'axios';
 //Components
 import { GlobalContext } from './ParentProvider';
 import AlertModal from './AlertModal';
@@ -13,13 +12,15 @@ import { IUserData } from '../models/interfaces/IUser';
 import { API_URLS } from '../models/ApiRoutes';
 import { ISettings } from '../models/interfaces/ISettings';
 import { UserResponse } from '../api/user/route';
+//Services
+import { post, put } from '../services/apiService';
 
 interface SettingsformProps {
   handleMenuToggle: () => void;
 }
 
 const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
-  const { user, settings, notes, BASE_URL, setUserSettings } = GlobalContext();
+  const { user, settings, notes, setUserNotes, setUserSettings } = GlobalContext();
   const [modal, setModal] = useState<Imodal>({
     message: '',
     type: FormResponseTypes.ERROR,
@@ -73,10 +74,11 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     };
 
     try {
-      const response = await axios.post<UserResponse>(BASE_URL + API_URLS.USER_ROUTE, data);
-      if (response.status === 200 || response.status === 201) {
+      const response = await post<UserResponse>(API_URLS.USER_ROUTE, data);
+      if (response.user) {
         localStorage.setItem('user', data.user?.displayName || 'guest');
-        if (response.data.user) return setTempSettings(response.data.user.settings);
+        setTempSettings(response.user.settings);
+        setUserNotes(response.user.notes);
       } else {
         handleModalResponse(FormResponseTexts.SIGNIN_FAILURE, FormResponseTypes.ERROR, false);
       }
@@ -84,7 +86,6 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
       handleModalResponse(FormResponseTexts.ERROR, FormResponseTypes.ERROR, false);
     }
   };
-
   const handleSettingsSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data: IUserData = {
@@ -94,9 +95,9 @@ const SettingsForm = ({ handleMenuToggle }: SettingsformProps) => {
     };
     if (user) {
       try {
-        const response = await axios.put<UserResponse>(BASE_URL + API_URLS.USER_ROUTE, data);
-        if (response.status === 200 && response.data.user) {
-          setUserSettings(response.data.user.settings);
+        const response = await put<UserResponse>(API_URLS.USER_ROUTE, data);
+        if (response.user) {
+          setUserSettings(response.user.settings);
           handleModalResponse(FormResponseTexts.SUCCESS_SETTINGS, FormResponseTypes.SUCCESS, false);
         }
       } catch (error) {
