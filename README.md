@@ -34,8 +34,8 @@ Clone the repository:
 - FIREBASE_APP_ID='[your app id]'
 - LOCAL_BASE_ROUTE='http://localhost:3000/api' (or your preferred port)
 - CLOUD_BASE_ROUTE='https://sheet-scanner.vercel.app/api' (or your preferred host)
-- USER_ROUTE='/[your preferred route user route]'
-- NOTE_ROUTE='/[your preferred note route]'
+- USER_ROUTE='/[your preferred user route]' (has to match the structure inside the api folder, by default it's '/user')
+- NOTE_ROUTE='/[your preferred note route]' (has to match the structure inside the api folder, by default it's '/notes')
 
 6. Get the project up and running locally: run "npm run dev".
 

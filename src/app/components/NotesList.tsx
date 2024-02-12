@@ -31,7 +31,7 @@ const NotesList = () => {
   const notesPerPage = 10;
 
   const filteredData = useMemo(() => {
-    return scanData(notes, searchTerms);
+    return scanData(noteList, searchTerms);
   }, [notes, searchTerms]);
 
   const indexOfLastNote = currentPage * notesPerPage;

@@ -23,6 +23,7 @@ import AlertModal from './AlertModal';
 import { UserResponse } from '../api/user/route';
 //Hooks
 import useModal from '../hooks/useModal';
+//Services
 import { post } from '../services/apiService';
 
 const Navbar = () => {
